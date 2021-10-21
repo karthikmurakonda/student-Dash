@@ -26,11 +26,11 @@ app.post("/register", (req, res) => {
 	User.register(new User({ username: username }), password, (err, user) => {
 		if (err) {
 			console.log(err);
-			return res.send("Error");
+			return res.send("Error", 401);
 		}
 
 		passport.authenticate("local")(req, res, () => {
-			res.send("Success")
+			res.send("Success", 200)
 		});
 	});
 });
