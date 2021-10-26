@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== 'production') {
+	require('dotenv').config();
+}
+
 var express = require('express');
 var mongoose = require('mongoose');
 var passport = require('passport');
@@ -11,10 +15,13 @@ var User = require("./models/user");
 
 var app = express();
 
-mongoose.connect("mongodb://localhost/sslproject");
+mongoose.connect(process.env.DATABASE_URL);
+const db = mongoose.connection;
+db.on('error', error => console.log(error));
+db.once('open', () => console.log('Connected to Mongoose'));
 
 app.use(express.static(path.resolve(__dirname, "./client/build")));
-app.use(session({ secret: "ssl2021", resave: false, saveUninitialized: false }));
+app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
 app.use(passport.session());
