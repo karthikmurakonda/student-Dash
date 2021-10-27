@@ -55,10 +55,6 @@ app.get("/logout", function (req, res) {
 	res.redirect("/");
 });
 
-app.get("*", function (request, response) {
-  response.sendFile(path.resolve(__dirname, "./client/build", "index.html"));
-});
-
 var port = process.env.PORT || 5000;
 app.listen(port, () => {
 	console.log("Server running on port " + port);
