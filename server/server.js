@@ -10,6 +10,7 @@ var passportLocalMongoose = require("passport-local-mongoose");
 var session = require("express-session");
 var bodyParser = require("body-parser");
 const path = require("path");
+const cors=require("cors");
 
 var User = require("./models/user");
 
@@ -29,6 +30,13 @@ app.use(passport.session());
 passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
+
+const corsOptions ={
+   origin:'*', 
+   credentials:true,            //access-control-allow-credentials:true
+   optionSuccessStatus:200,
+}
+app.use(cors(corsOptions)) // Use this after the variable declaration
 
 app.post("/register", (req, res) => {
 	var username = req.body.username
