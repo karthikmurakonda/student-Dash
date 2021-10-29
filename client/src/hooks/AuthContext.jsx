@@ -2,6 +2,10 @@ import { createContext, useContext, useState } from 'react';
 import { useLocation, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
+const server = axios.create({
+  baseURL: 'https://studentdash-server.herokuapp.com/'
+});
+
 const AuthContext = createContext();
 
 export function AuthProvider({children}) {
@@ -27,13 +31,13 @@ function useProvideAuth() {
 	function signin(username, password) {
 		let { from } = location.state || { from: { pathname: "/" } }
 
-		axios.post('/login', querystring.stringify({
+		server.post('/login', querystring.stringify({
 			username: username, 
 			password: password
 		}))
 		.then((res) => {
 			setUser(res.data.user);
-			console.log(res);
+			console.log("User logged in:", res.data.user);
 			history.push(from);
 		})
 		.catch((err) => {
@@ -42,7 +46,7 @@ function useProvideAuth() {
 	}
 
 	function signout() {
-		axios.get('/logout')
+		server.get('/logout')
 			.then(res => {
 				console.log("Logged Out")
 				setUser();
@@ -53,7 +57,7 @@ function useProvideAuth() {
 	}
 
 	function register(username, password) {
-		axios.post('/register', querystring.stringify({
+		server.post('/register', querystring.stringify({
 			username: username, 
 			password: password
 		}))
