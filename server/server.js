@@ -20,7 +20,7 @@ const db = mongoose.connection;
 db.on('error', error => console.log(error));
 db.once('open', () => console.log('Connected to Mongoose'));
 
-app.use(express.static(path.resolve(__dirname, "./client/build")));
+
 app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false }));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(passport.initialize());
@@ -30,30 +30,7 @@ passport.use(new LocalStrategy(User.authenticate()));
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
-app.post("/register", (req, res) => {
-	var username = req.body.username
-	var password = req.body.password
-	console.log(username, password);
-	User.register(new User({ username: username }), password, (err, user) => {
-		if (err) {
-			console.log(err);
-			return res.status(401).send(err);
-		}
-
-		passport.authenticate("local")(req, res, () => {
-			res.status(200);
-		});
-	});
-});
-
-app.post("/login", passport.authenticate("local"), (req, res) => {
-	res.status(200).send({user: req.user.username});
-})
-
-app.get("/logout", function (req, res) {
-	req.logout();
-	res.redirect("/");
-});
+app.use('/', require('./routes/index'));
 
 var port = process.env.PORT || 5000;
 app.listen(port, () => {
