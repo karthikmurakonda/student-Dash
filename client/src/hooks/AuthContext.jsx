@@ -1,9 +1,10 @@
-import { createContext, useContext, useState } from 'react';
-import { useLocation, useHistory } from 'react-router-dom';
-import axios from 'axios';
+import { createContext, useContext, useState } from 'react'
+import { useLocation, useHistory } from 'react-router-dom'
+import axios from 'axios'
 
 const server = axios.create({
-  baseURL: 'https://studentdash-server.herokuapp.com/'
+	baseURL: process.env.REACT_APP_SERVER_URL,
+	withCredentials: true
 });
 
 const AuthContext = createContext();
@@ -23,12 +24,29 @@ export function useAuth() {
 }
 
 function useProvideAuth() {
-	const [user, setUser] = useState();
+	const [user, setUser] = useState('user',);
 	const location = useLocation();
 	const history = useHistory();
 	const querystring = require('querystring');
 
-	function signin(username, password) {
+	function checkauth() {
+		server.get('/login')
+			.then((res) => {
+				if (res.data.isAuth) {
+					// console.log('User is logged in :', res.data.user)
+					setUser(res.data.user);
+				}
+				else {
+					// console.log('User is not logged in!')
+					setUser()
+				}
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	}
+
+	function login(username, password) {
 		let { from } = location.state || { from: { pathname: "/" } }
 
 		server.post('/login', querystring.stringify({
@@ -37,7 +55,6 @@ function useProvideAuth() {
 		}))
 		.then((res) => {
 			setUser(res.data.user);
-			console.log("User logged in:", res.data.user);
 			history.push(from);
 		})
 		.catch((err) => {
@@ -45,8 +62,8 @@ function useProvideAuth() {
 		});
 	}
 
-	function signout() {
-		server.get('/logout')
+	function logout() {
+		server.post('/logout')
 			.then(res => {
 				console.log("Logged Out")
 				setUser();
@@ -69,5 +86,5 @@ function useProvideAuth() {
 		});
 	}
 
-	return {user, signin, signout, register}
+	return {user, login, logout, register, checkauth}
 }
