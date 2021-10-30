@@ -24,7 +24,7 @@ export function useAuth() {
 }
 
 function useProvideAuth() {
-	const [user, setUser] = useState('user',);
+	const [user, setUser] = useState();
 	const location = useLocation();
 	const history = useHistory();
 	const querystring = require('querystring');
