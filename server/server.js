@@ -32,7 +32,7 @@ db.once('open', () => console.log('Connected to Mongoose'))
 // Enable CORS
 if (process.env.NODE_ENV === 'production') {
 	const corsOptions ={
-	   origin:'https://studentdash-server.herokuapp.com/',
+	   origin:'https://studentdash.herokuapp.com',
 	   credentials: true,
 	   optionSuccessStatus:200
 	}
