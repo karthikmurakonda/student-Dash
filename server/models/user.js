@@ -7,9 +7,6 @@ const User = new Schema({
 		type: String,
 		required: true,
 	},
-	password:{
-		type: String,
-	},
 	rollNumber:{
 		type: String,
 		required: true,

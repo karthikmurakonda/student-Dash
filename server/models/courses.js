@@ -1,6 +1,5 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
-const passportLocalMongoose = require('passport-local-mongoose');
 
 const { toJSON, paginate } = require( './plugings');
 
@@ -38,11 +37,9 @@ const courseSchema = new Schema({
     },
     course_link: { // link to course website or syllabus
         type: String,
-        required: true
     },
     course_capacity: {
         type: Number,
-        required: true
     },
 });
 
