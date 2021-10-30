@@ -15,7 +15,7 @@ const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
 app.set('trust proxy', 1)
-app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false, cookie: { secure: auto } }))
+app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false, cookie: { secure: 'auto' } }))
 app.use(passport.initialize())
 app.use(passport.session())
 
