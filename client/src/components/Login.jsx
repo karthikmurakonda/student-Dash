@@ -8,7 +8,7 @@ export default function Login() {
 
 	function handleSubmit(e) {
 		e.preventDefault();
-		auth.signin(idRef.current.value, passRef.current.value);
+		auth.login(idRef.current.value, passRef.current.value);
 	}
 
 	return (

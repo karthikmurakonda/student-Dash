@@ -33,11 +33,11 @@ export default function App() {
 
 function User() {
 	const auth = useAuth();
-	console.log(auth)
+	auth.checkauth()
 	return auth.user ? (
 			<>
 				Welcome {auth.user}!
-				<button onClick={auth.signout}>Logout</button>
+				<button onClick={auth.logout}>Logout</button>
 			</>
 		) : (
 			"You are not signed in!"
