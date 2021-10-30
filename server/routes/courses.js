@@ -12,6 +12,26 @@ courseRouter.get('/', (req, res) => {
     });
 });
 
-courseRouter.post('/:courseId', )
+// Get a single course
+courseRouter.get('/:id', (req, res) => {
+    Courses.findById(req.params.id, (err, course) => {
+        if (err) {
+            res.status(500).send(err);
+        }
+        res.send(course);
+    });
+});
+
+
+// Create a new course
+courseRouter.post('/', (req, res) => {
+    const newCourse = new Courses(req.body);
+    newCourse.save((err, course) => {
+        if (err) {
+            res.status(500).send(err);
+        }
+        res.send(course);
+    });
+});
 
 module.exports = courseRouter;
