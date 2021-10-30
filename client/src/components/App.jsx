@@ -5,29 +5,25 @@ import { AuthProvider, useAuth } from '../hooks/AuthContext'
 
 export default function App() {
 	return (
-		<Router>
-			<AuthProvider>
-				<Switch>
-					<Route path="/login">
-						<Login />
-					</Route>
-					<Route path="/signup">
-						<Signup />
-					</Route>
-					<Route path="/">
-						<User />
-						<ul>
-							<li>
-								<Link to="/login">Login</Link>
-							</li>
-							<li>
-								<Link to="/signup">Signup</Link>
-							</li>
-						</ul>
-					</Route>
-				</Switch>
-			</AuthProvider>
-		</Router>
+		<Switch>
+			<Route path="/login">
+				<Login />
+			</Route>
+			<Route path="/signup">
+				<Signup />
+			</Route>
+			<Route path="/">
+				<User />
+				<ul>
+					<li>
+						<Link to="/login">Login</Link>
+					</li>
+					<li>
+						<Link to="/signup">Signup</Link>
+					</li>
+				</ul>
+			</Route>
+		</Switch>
 	);
 }
 
