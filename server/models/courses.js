@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
+const { toJSON, paginate } = require( './plugings');
+
 // Schema to store weekly course timetable
 const courseSchema = new Schema({
     course_name: {
@@ -12,25 +14,17 @@ const courseSchema = new Schema({
         type: String,
         required: true
     },
-    course_type: {
-        type: String,
-        required: true
-    },
     course_credit: {
         type: Number,
         required: true
     },
-    course_semester: {
-        type: String,
-        required: true
-    },
-    course_year: {
-        type: String,
-        required: true
-    },
     // course timetable with type timestamp in array
     course_timetable: {
-        type: Array,
+        type: [{
+            day : {type: String},
+            start_time : {type: String},
+            end_time : {type: String}
+        }],
         required: true
     },
 
@@ -42,18 +36,18 @@ const courseSchema = new Schema({
         type: String,
         required: true
     },
+    course_link: { // link to course website or syllabus
+        type: String,
+        required: true
+    },
     course_capacity: {
         type: Number,
         required: true
     },
-    course_remaining: {
-        type: Number,
-        required: true
-    }
 });
 
-// plugin to passport-local-mongoose
-courseSchema.plugin(passportLocalMongoose);
+courseSchema.plugin(toJSON);
+courseSchema.plugin(paginate);
 
 // export the model
 module.exports = mongoose.model('Course', courseSchema);

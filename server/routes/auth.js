@@ -5,15 +5,22 @@ const User = require('../models/user');
 authRouter.post("/register", (req, res) => {
 	var username = req.body.username
 	var password = req.body.password
+	var email = req.body.email
+	var rollNumber = req.body.rollNumber
+
+	// log only if env is not production
+	if (process.env.NODE_ENV !== 'production') {
+		console.log(`username: ${username}, password: ${password}, email: ${email}`);
+	}
 	console.log(username, password);
-	User.register(new User({ username: username }), password, (err, user) => {
+	User.register(new User({ username: username, email : email, rollNumber: rollNumber}), password, (err, user) => {
 		if (err) {
 			console.log(err);
 			return res.status(401).send(err);
 		}
 
 		passport.authenticate("local")(req, res, () => {
-			res.status(200);
+			res.status(200).send(user);
 		});
 	});
 });
