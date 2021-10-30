@@ -10,11 +10,23 @@ const LocalStrategy = require('passport-local').Strategy
 const session = require("express-session")
 const cors = require("cors");
 
-// Setup express
+// Setup middleware
 const app = express()
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
-app.use(session({ secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false }))
+app.enable('trust proxy')
+
+var sess = { 
+	secret: process.env.SESSION_SECRET,
+	resave: false, 
+	saveUninitialized: false, 
+	cookie: { secure: 'auto' }
+}
+if (process.env.NODE_ENV === 'production') {
+	sess.cookie.sameSite = 'none'
+}
+app.use(session(sess))
+
 app.use(passport.initialize())
 app.use(passport.session())
 
