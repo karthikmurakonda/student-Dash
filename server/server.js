@@ -61,39 +61,8 @@ else {
 	console.log('Development CORS Set')
 }
 
-app.post("/register", (req, res) => {
-	var username = req.body.username
-	var password = req.body.password
-	console.log(username, password);
-	User.register(new User({ username: username }), password, (err, user) => {
-		if (err) {
-			console.log(err);
-			return res.status(401).send(err);
-		}
+app.use('/', require('./routes/index'));
 
-		passport.authenticate("local")(req, res, () => {
-			res.status(200);
-		});
-	});
-});
-
-app.post("/login", passport.authenticate("local"), (req, res) => {
-	res.send({user: req.user.username}).status(200)
-})
-
-app.get("/login", passport.authenticate("session"), (req, res) => {
-	if (req.isAuthenticated()) {
-		res.send({isAuth: true, user: req.user.username}).status(200)
-	}
-	else {
-		res.send({isAuth: false}).status(200)
-	}
-})
-
-app.post("/logout", function (req, res) {
-	req.logout()
-	res.sendStatus(200)
-});
 
 var port = process.env.PORT || 5000;
 app.listen(port, () => {
