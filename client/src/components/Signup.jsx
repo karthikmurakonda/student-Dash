@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useAuth } from '../hooks/AuthContext'
+import { Form, Button, Container, Row, Col } from 'react-bootstrap'
 
 export default function Signup() {
 	const idRef = useRef();
@@ -13,20 +14,40 @@ export default function Signup() {
 	}
 
 	return (
-		<div>
-			<form onSubmit={handleSubmit}>
+	<Container>
+		<Row className="justify-content-center my-4">
+			<Col lg="5" md="9">
+				<h1 className="mx-5 my-4">Signup</h1>
+				<Form className="mx-5 my-4" onSubmit={handleSubmit}>
+					<Form.Group className="mb-3">
+						<Row>
+							<Col><Form.Control type="text" placeholder="First name"></Form.Control></Col>
+							<Col><Form.Control type="text" placeholder="Last name"></Form.Control></Col>
+						</Row>
+					</Form.Group>
 
-                <label>Username</label>
-				<input type="text" ref={idRef} required/>
+					<Form.Group className="mb-3">
+						<Form.Control type="email" placeholder="Institute Email"></Form.Control>
+					</Form.Group>
 
-                <label>Password</label>
-				<input type="password" ref={passRef} required/>
+					<Form.Group className="mb-3">
+						<Form.Control ref={idRef} type="text" placeholder="Username" required/>
+					</Form.Group>
 
-				<label>Confirm Password</label>
-				<input type="confirm-password" ref={confirmRef} required/>
+					<Form.Group className="mb-3">
+						<Form.Control ref={passRef} type="password" placeholder="Password" required/>
+					</Form.Group>
 
-                <input type="submit"/>
-			</form>
-		</div>
+					<Form.Group className="mb-3">
+						<Form.Control ref={passRef} type="password" placeholder="Confirm Password" required/>
+					</Form.Group>
+
+					<Button variant="primary" type="submit">
+						Sign Up
+					</Button>
+				</Form>
+			</Col>
+		</Row>
+	</Container>
 	)
 }

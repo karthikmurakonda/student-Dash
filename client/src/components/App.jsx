@@ -1,41 +1,28 @@
-import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import { Switch, Route, Link } from "react-router-dom";
 import Login from './Login';
 import Signup from "./Signup";
-import { AuthProvider, useAuth } from '../hooks/AuthContext'
+import {  useAuth } from '../hooks/AuthContext'
+import MyNav from "./Navbar/MyNav";
+import Poster from "./Poster/Poster";
+import { Container } from "react-bootstrap";
 
 export default function App() {
 	return (
-		<Switch>
-			<Route path="/login">
-				<Login />
-			</Route>
-			<Route path="/signup">
-				<Signup />
-			</Route>
-			<Route path="/">
-				<User />
-				<ul>
-					<li>
-						<Link to="/login">Login</Link>
-					</li>
-					<li>
-						<Link to="/signup">Signup</Link>
-					</li>
-				</ul>
-			</Route>
-		</Switch>
+		<>
+		<Container className="d-flex flex-column overflow-hidden min-vh-100 vh-100 p-0" fluid>
+			<MyNav/>
+			<Switch>
+				<Route path="/login">
+					<Login />
+				</Route>
+				<Route path="/signup">
+					<Signup />
+				</Route>
+				<Route path="/">
+					<Poster />
+				</Route>
+			</Switch>
+		</Container>
+		</>
 	);
-}
-
-function User() {
-	const auth = useAuth();
-	auth.checkauth()
-	return auth.user ? (
-			<>
-				Welcome {auth.user}!
-				<button onClick={auth.logout}>Logout</button>
-			</>
-		) : (
-			"You are not signed in!"
-		)
 }
