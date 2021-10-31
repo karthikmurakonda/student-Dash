@@ -43,7 +43,7 @@ authRouter.get("/login", passport.authenticate("session"), (req, res) => {
 authRouter.post("/logout", passport.authenticate("session"), function (req, res) {
 	// console.log(req.user);
 	req.logout();
-	res.sendStatus(204);
+	res.sendStatus(202);
 });
 
 module.exports = authRouter;

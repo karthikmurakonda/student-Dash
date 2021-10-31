@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { useAuth } from '../hooks/AuthContext';
+import { Form, Button, Container, Row, Col } from 'react-bootstrap'
 
 export default function Login() {
 	const idRef = useRef();
@@ -12,17 +13,25 @@ export default function Login() {
 	}
 
 	return (
-		<div>
-			<form onSubmit={handleSubmit}>
+		<Container>
+			<Row className="justify-content-center my-4">
+				<Col lg="5" md="9">
+					<h1 className="mx-5 my-4">Login</h1>
+					<Form className="mx-5 my-4" onSubmit={handleSubmit}>
+						<Form.Group className="mb-3" controlId="formBasicEmail">
+							<Form.Control ref={idRef} type="text" placeholder="Username" required/>
+						</Form.Group>
 
-                <label>Username</label>
-				<input type="text" ref={idRef} required/>
+						<Form.Group className="mb-3" controlId="formBasicPassword">
+							<Form.Control ref={passRef} type="password" placeholder="Password" required/>
+						</Form.Group>
 
-                <label>Password</label>
-				<input type="password" ref={passRef} required/>
-
-                <input type="submit"/>
-			</form>
-		</div>
+						<Button variant="primary" type="submit">
+							Login
+						</Button>
+					</Form>
+				</Col>
+			</Row>
+		</Container>
 	)
 }

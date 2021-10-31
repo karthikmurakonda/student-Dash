@@ -1,0 +1,17 @@
+html, body, #root {
+    height: 100%;
+}
+
+.link-white {
+    color: white !important;
+}
+
+.link-white:hover {
+    color: #ced4da !important;
+}
+
+.center {
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+}
