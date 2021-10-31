@@ -27,7 +27,7 @@ authRouter.post("/register", (req, res) => {
 
 
 authRouter.post("/login", passport.authenticate("local"), (req, res) => {
-	res.status(200).send({user: req.user});
+	res.status(200).send({user: req.user.username});
 })
 
 authRouter.get("/login", passport.authenticate("session"), (req, res) => {
