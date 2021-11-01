@@ -26,9 +26,16 @@ authRouter.post("/register", (req, res) => {
 });
 
 
-authRouter.post("/login", passport.authenticate("local"), (req, res) => {
-	res.status(200).send({user: req.user.username});
-})
+authRouter.post("/login", 
+	passport.authenticate("local", { failWithError: true }), 
+	(req, res) => {
+		console.log(req.session.messages)
+		res.status(200).send({user: req.user.username})
+	},
+	(err, req, res, next) => {
+		res.send(err.message).status(err.status)
+	}
+)
 
 authRouter.get("/login", passport.authenticate("session"), (req, res) => {
 	if (req.isAuthenticated()) {
