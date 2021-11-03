@@ -47,7 +47,7 @@ function useProvideAuth() {
 			})
 	}
 
-	function login(username, password) {
+	function login(username, password, setShowAlert) {
 		let { from } = location.state || { from: { pathname: "/" } }
 
 		setResp()
@@ -61,8 +61,7 @@ function useProvideAuth() {
 			history.push(from);
 		})
 		.catch((err) => {
-			console.log("catch")
-			setResp(err.response.status)
+			setShowAlert(true)
 		})
 	}
 
@@ -86,9 +85,47 @@ function useProvideAuth() {
 			console.log(res);
 		})
 		.catch((err) => {
-			console.log(err);
+			
 		});
 	}
 
-	return {user, resp, setResp, login, logout, register, checkauth}
+	function usernameExists(username) {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const response = await server.post('register', {
+					fname: '',
+					lname: '',
+					email: '',
+					username: username, 
+					password: ''
+				})
+				console.log(response);
+			} catch (error) {
+				console.log(error.response.data.name);
+				if (error.response.data.name === 'UserExistsError') {
+					console.log(true);
+					resolve(false)
+				}
+				else {
+					console.log(false);
+					resolve(true)
+				}
+			}
+			
+			// .catch((err) => {
+			// 	// console.log(err.response)
+			// 	console.log(err.response.name)
+			// 	if (err.response.name === 'UserExistsError') {
+			// 		console.log(false)
+			// 		resolve(false)
+			// 	}
+			// 	else {
+			// 		console.log(true);
+			// 		resolve(true)
+			// 	}
+			// })
+		})
+	}
+
+	return {user, resp, setResp, login, logout, register, checkauth, usernameExists}
 }
