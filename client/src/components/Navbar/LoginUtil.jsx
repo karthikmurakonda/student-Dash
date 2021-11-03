@@ -7,6 +7,8 @@ export default function LoginUtil() {
     const auth = useAuth()
     const history = useHistory()
 
+    auth.checkauth()
+
     function login() {
         history.push('/login')
     }

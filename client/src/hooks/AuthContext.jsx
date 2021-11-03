@@ -26,9 +26,9 @@ export function useAuth() {
 function useProvideAuth() {
 	const [user, setUser] = useState();
 	const [resp, setResp] = useState();
+	const [regResp, setRegResp] = useState()
 	const location = useLocation();
 	const history = useHistory();
-	const querystring = require('querystring');
 
 	function checkauth() {
 		server.get('/login')
@@ -76,13 +76,16 @@ function useProvideAuth() {
 			})
 	}
 
-	function register(username, password) {
-		server.post('/register', querystring.stringify({
+	function register(fname, lname, email, username, password) {
+		server.post('/register', {
+			fname: fname,
+			lname: lname,
+			email: email,
 			username: username, 
 			password: password
-		}))
+		})
 		.then((res) => {
-			console.log(res);
+			history.push('/login');
 		})
 		.catch((err) => {
 			
