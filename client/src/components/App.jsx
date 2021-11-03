@@ -1,7 +1,6 @@
-import { Switch, Route, Link } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import Login from './Login';
 import Signup from "./Signup";
-import {  useAuth } from '../hooks/AuthContext'
 import MyNav from "./Navbar/MyNav";
 import Poster from "./Poster/Poster";
 import { Container } from "react-bootstrap";

@@ -5,7 +5,7 @@ import './styles.css'
 export default function Poster() {
     return (
         <Container fluid className="p-0 overflow-hidden text-center">
-            <img className="poster-img" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2070&q=80" alt="bg image" />
+            <img className="poster-img" src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2070&q=80" alt="bg" />
             <div className="poster-text position-absolute top-50 start-50 translate-middle d-block">
                 <Container fluid className="h-100">
                     <Row className="align-items-center h-100 justify-content-center">

@@ -5,7 +5,6 @@ import { Form, Button, Container, Row, Col } from 'react-bootstrap'
 export default function Signup() {
 	const idRef = useRef();
 	const passRef = useRef();
-	const confirmRef = useRef();
 	const auth = useAuth();
 
 	function handleSubmit(e) {
