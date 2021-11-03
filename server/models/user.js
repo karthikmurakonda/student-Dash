@@ -3,18 +3,27 @@ const Schema = mongoose.Schema;
 const passportLocalMongoose = require('passport-local-mongoose');
 
 const User = new Schema({
-	username:{
+	fname: {
 		type: String,
-		required: true,
+		required: true
 	},
-	rollNumber:{
+	lname: {
 		type: String,
-		required: true,
-		unique: true,
+		required: true
 	},
 	email: {
 		type: String,
 		required: true
+	},
+	username:{
+		type: String,
+		required: true,
+		unique: true
+	},
+	rollNumber:{
+		type: String,
+		required: false,
+		unique: false
 	},
 	role: {
 		// 0 - student , 1 - teacher , 2 - admin
