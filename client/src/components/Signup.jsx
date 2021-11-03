@@ -7,10 +7,6 @@ import { Formik } from 'formik'
 export default function Signup() {
 	const auth = useAuth();
 
-	function checkUsername(username) {
-		return auth.usernameExists(username)
-	}
-
 	let schema = yup.object().shape({
 		fname: yup.string().required('Required!'),
 		lname: yup.string().required('Required!'),
@@ -20,6 +16,10 @@ export default function Signup() {
 		confirm: yup.string().oneOf([yup.ref('password'), null], 'Passwords do not match!').required('Required!')
 	})
 
+	function checkUsername(username) {
+		return auth.usernameExists(username)
+	}
+	
 	function makeUser(values) {
 		auth.register(values.fname, values.lname, values.email, values.username, values.password);
 	}
