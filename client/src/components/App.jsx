@@ -5,6 +5,8 @@ import {  useAuth } from '../hooks/AuthContext'
 import MyNav from "./Navbar/MyNav";
 import Poster from "./Poster/Poster";
 import { Container } from "react-bootstrap";
+import Courseplanner from "./Courseplanner";
+
 
 export default function App() {
 	return (
@@ -17,6 +19,9 @@ export default function App() {
 				</Route>
 				<Route path="/signup">
 					<Signup />
+				</Route>
+				<Route path= "/courseplanner">
+					<Courseplanner />
 				</Route>
 				<Route path="/">
 					<Poster />
