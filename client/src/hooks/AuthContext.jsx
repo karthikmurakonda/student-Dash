@@ -47,7 +47,7 @@ function useProvideAuth() {
 			})
 	}
 
-	function login(username, password) {
+	function login(username, password, setShowAlert) {
 		let { from } = location.state || { from: { pathname: "/" } }
 
 		setResp()
@@ -61,7 +61,7 @@ function useProvideAuth() {
 			history.push(from);
 		})
 		.catch((err) => {
-			setResp(err.response.status)
+			setShowAlert(true)
 		})
 	}
 
@@ -88,12 +88,7 @@ function useProvideAuth() {
 			history.push('/login');
 		})
 		.catch((err) => {
-			if (err.response.status === 401) {
-				setRegResp({
-					error: err.response.data.name,
-					message: err.response.data.message
-				})
-			}
+			
 		});
 	}
 
@@ -135,5 +130,5 @@ function useProvideAuth() {
 		})
 	}
 
-	return {user, resp, regResp, setRegResp, setResp, login, logout, register, checkauth, usernameExists}
+	return {user, resp, setResp, login, logout, register, checkauth, usernameExists}
 }
