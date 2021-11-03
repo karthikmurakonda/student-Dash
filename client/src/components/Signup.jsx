@@ -5,67 +5,6 @@ import * as yup from 'yup'
 import { Formik } from 'formik'
 
 export default function Signup() {
-	
-
-	// const [validated, setValidated] = useState({
-	// 	fname: false,
-	// 	lname: false,
-	// 	email: false,
-	// 	password: false,
-	// 	confim: false
-	// })
-
-	// function handleSubmit(event) {
-	// 	// const form = event.currentTarget;
-	// 	// if (form.checkValidity() === false) {
-	// 	// 	event.preventDefault();
-	// 	// 	event.stopPropagation();
-	// 	// }
-
-	// 	// if (form.checkValidity() === true) {
-	// 	// 	event.preventDefault();
-	// 	// 	
-	// 	// }
-	// 	// setValidated(true);
-	// }
-
-	// function checkUsername() {
-	// 	auth.register("", "", "", usernameRef.current.value, "");
-	// }
-
-	// function checkEmpty(event) {
-	// 	if (event.target.value === "") {
-	// 		event.target.classList.remove("is-valid")
-	// 		event.target.classList.add("is-invalid")
-	// 	}
-	// 	else {
-	// 		event.target.classList.remove("is-invalid")
-	// 		event.target.classList.add("is-valid")
-	// 	}
-	// 	console.log(validated);
-	// }
-
-	// useEffect(() => {
-	// 	console.log(validated);
-	// 	if (validated === 5) {
-	// 		setDisabled(false)
-	// 	}
-	// }, [validated])
-
-	// useEffect(() => {
-	// 	if (auth.regResp) {
-	// 		if (auth.regResp.error === "UserExistsError") {
-	// 			usernameRef.current.classList.add("is-invalid")
-	// 			auth.setRegResp()
-	// 			// setValidated(false);
-	// 		}
-	// 		else {
-	// 			usernameRef.current.classList.remove("is-invalid")
-	// 		}
-	// 	}
-	// }, [auth.regResp])
-
-	// New validation
 	const auth = useAuth();
 
 	function checkUsername(username) {
