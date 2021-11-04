@@ -8,17 +8,15 @@ import { useState, useEffect } from 'react';
 
 function CourseItem(props) {
     const {
-        coursename,
-        onClick,
-        disabled,
-        checked,
+        course,
+        id
     } = props;
 
     // functions
     return (
         <div className="course-item">
-            < input type = "checkbox"   disabled = { disabled } />
-            <label>{coursename}</label>
+            < input type = "checkbox" />
+            <label>{course}</label>
         </div>
     );
 }

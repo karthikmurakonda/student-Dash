@@ -4,12 +4,13 @@ import 'tui-calendar/dist/tui-calendar.css';
 // make page that has tui calendar in the left and a list of courses in the right
 // when you click on a course, it should show course in calendar
 
-function Calendar() {
+function Timetable(props) {
+  const { courses } = props;
     return (
       <div>
-        <Calendar />
+        <Calendar/>
       </div>
     );
 }
 
-export default Calendar;
+export default Timetable;

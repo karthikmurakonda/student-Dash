@@ -1,15 +1,19 @@
 import { useState } from "react";
+import CourseItem from "./CourseItem";
 
-function CourseList() {
+function CourseList(props) {
+    const courses = props.courses;
+
     
     return (
         <div>
-            <h2>Courses</h2>
             <ul>
-                <li>Course 1</li>
-                <li>Course 2</li>
-
+                {courses.map(course => (
+                    <CourseItem key={course.id} course={course.course} />
+                ))}
             </ul>
         </div>
     )
 }
+
+export default CourseList;
