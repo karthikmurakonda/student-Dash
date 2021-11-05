@@ -8,7 +8,6 @@ import { Container } from "react-bootstrap";
 export default function App() {
 	return (
 		<>
-		<Container className="d-flex flex-column overflow-hidden min-vh-100 vh-100 p-0" fluid>
 			<MyNav/>
 			<Switch>
 				<Route path="/login">
@@ -21,7 +20,6 @@ export default function App() {
 					<Poster />
 				</Route>
 			</Switch>
-		</Container>
 		</>
 	);
 }
