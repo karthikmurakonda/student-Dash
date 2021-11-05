@@ -66,7 +66,7 @@ function useProvideAuth() {
 	function logout() {
 		server.post('/logout')
 			.then(res => {
-				console.log("Logged Out")
+				history.push('/')
 				setUser();
 			})
 			.catch(err => {

@@ -1,4 +1,4 @@
-import { Col, Container, Modal, Row, Spinner } from "react-bootstrap";
+import { Col, Container, Row, Spinner } from "react-bootstrap";
 import './styles.css'
 
 export default function Loading() {

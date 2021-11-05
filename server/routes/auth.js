@@ -17,7 +17,6 @@ authRouter.post("/register", (req, res) => {
 
 	User.register(new User({ fname: fname, lname: lname, email : email, username: username, rollNumber: rollNumber}), password, (err, user) => {
 		if (err) {
-			console.log("MyError: ", err);
 			return res.status(401).send(err);
 		}
 
@@ -31,7 +30,6 @@ authRouter.post("/register", (req, res) => {
 authRouter.post("/login", 
 	passport.authenticate("local", { failWithError: true }), 
 	(req, res) => {
-		console.log(req.session.messages)
 		res.status(200).send({user: req.user.username})
 	},
 	(err, req, res, next) => {

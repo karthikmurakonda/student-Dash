@@ -1,9 +1,8 @@
-import { Switch, Route, Redirect, useHistory } from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import Login from '../Login';
 import Signup from "../Signup";
 import MyNav from "../Navbar/MyNav";
 import Poster from "../Poster/Poster";
-import { Container } from "react-bootstrap";
 import Courseplanner from "../CourseList/Courseplanner";
 import UserRoute from "./UserRoute";
 
