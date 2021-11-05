@@ -4,7 +4,7 @@ import LoginUtil from './LoginUtil'
 
 export default function MyNav() {
     return (
-        <Navbar bg="dark" variant="dark" sticky="top">
+        <Navbar bg="dark" variant="dark" fixed="top">
             <Container fluid>
                 <Navbar.Brand className="mx-3" href="/">Student Dash</Navbar.Brand>
                 <LoginUtil className="justify-content-end"/>
