@@ -17,6 +17,8 @@ export default function LoginUtil() {
         history.push('/signup')
     }
 
+    console.log("Hi",auth.user)
+
     if (auth.user) {
         return (
             <Nav>
