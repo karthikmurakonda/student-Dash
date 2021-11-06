@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef} from 'react';
+import { useCP, server } from '../../hooks/CPContext';
 
 // Component: CourseList
 // Description:
@@ -7,15 +8,43 @@ import { useState, useEffect } from 'react';
 // 		The list is filtered by the user's search term.
 
 function CourseItem({ course, id, disabled }) {
+    const inputRef = useRef()
+    const CP = useCP()
 
-    // functions
+    async function addCourse() {
+        // Add new calendar for the course
+        const newCalendar = {
+            id: id,
+            name: course
+        }
+        let calendars = CP.calendars
+        calendars.push(newCalendar)
+        CP.setCalendars(calendars)
+        
+    }
+
+    function removeCourse() {
+        let calendars = CP.calendars
+        // remove item from array when id matches
+        calendars = calendars.filter(calendar => calendar.id !== id)
+        CP.setCalendars(calendars);
+        
+
+    }
+
+    function handleSelect() {
+        const input = inputRef.current
+        if (input.checked) {
+            addCourse()
+        }
+        else {
+            removeCourse()
+        }
+    }
+
     return (
-        // <div className="course-item">
-        //     < input type = "checkbox" />
-        //     <label>{course}</label>
-        // </div>
-        <label class="list-group-item" >
-            <input class="form-check-input me-1" type="checkbox" value="" disabled={disabled} />
+        <label className="list-group-item" >
+            <input ref={inputRef} onChange={handleSelect} className="form-check-input me-1" type="checkbox" value="" disabled={disabled} />
             {course}
         </label>
 

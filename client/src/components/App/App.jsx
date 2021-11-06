@@ -5,6 +5,7 @@ import MyNav from "../Navbar/MyNav";
 import Poster from "../Poster/Poster";
 import Courseplanner from "../CourseList/Courseplanner";
 import UserRoute from "./UserRoute";
+import { CPProvider } from "../../hooks/CPContext";
 
 
 export default function App() {
@@ -19,7 +20,9 @@ export default function App() {
 					<Signup />
 				</Route>
 				<UserRoute path="/courseplanner">
-					<Courseplanner />
+					<CPProvider>
+						<Courseplanner />
+					</CPProvider>
 				</UserRoute>
 				<Route path="/">
 					<Poster />
