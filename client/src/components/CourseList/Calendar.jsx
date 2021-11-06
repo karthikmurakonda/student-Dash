@@ -13,9 +13,7 @@ var templates = {
 function Timetable(props) {
   const { courses } = props;
     return (
-      <div>
-        <Calendar taskView={false} scheduleView={['time']} template={templates} week={{hourStart:7, hourEnd:20}} />
-      </div>
+        <Calendar height="718px" taskView={false} scheduleView={['time']} template={templates} week={{hourStart:7, hourEnd:20}} />
     );
 }
 
