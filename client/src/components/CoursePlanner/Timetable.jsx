@@ -2,7 +2,6 @@ import Calendar from '@toast-ui/react-calendar';
 import 'tui-calendar/dist/tui-calendar.css';
 import { useRef, useEffect } from 'react';
 import { useCP } from '../../hooks/CPContext';
-import Button from '@restart/ui/esm/Button';
 
 // make page that has tui calendar in the left and a list of courses in the right
 // when you click on a course, it should show course in calendar

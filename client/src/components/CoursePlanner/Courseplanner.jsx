@@ -1,9 +1,8 @@
 import Timetable from "./Timetable";
 import CourseList from "./CourseList/CourseList";
-import { Container, Row, Col, Collapse, Card, Modal, Alert, Badge } from 'react-bootstrap'
+import { Container, Row, Col, Collapse, Card, Modal, Badge } from 'react-bootstrap'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import { useState, useEffect } from "react";
-import axios from "axios";
 import Loading from "../Loading/Loading"
 import { server, useCP } from "../../hooks/CPContext"
 import ListCourses from "./AddCourse/ListCourses"

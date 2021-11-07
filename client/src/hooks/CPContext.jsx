@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useState } from 'react'
 import axios from 'axios'
 
 export const server = axios.create({
@@ -71,7 +71,7 @@ function useProvideCP() {
                 for (let k = 0; k < daySchedule.length; k++) {
                     const cls2 = daySchedule[k];
                     // if there is a start time inside a class.
-                    if (j != k) {
+                    if (j !== k) {
                         if ((cls1.rawStart <= cls2.rawStart) && (cls2.rawStart < cls1.rawEnd)) {
                             // push to clashes if not already in clashes
                             if (!ispresent(clashes_local, cls1.title, cls2.title, days[i])) {
