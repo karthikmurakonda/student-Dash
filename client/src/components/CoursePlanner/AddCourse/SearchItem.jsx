@@ -1,6 +1,5 @@
 import { useState, useEffect, useRef} from 'react';
-import { useCP, server } from '../../../hooks/CPContext';
-const randomColor = require('randomcolor');
+import { useCP } from '../../../hooks/CPContext';
 
 // Component: CourseList
 // Description:

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CourseItem from "./CourseItem";
-import { useCP } from "../../hooks/CPContext";
+import { useCP } from "../../../hooks/CPContext";
 
 function CourseList({ handleAdd }) {
     const CP = useCP()

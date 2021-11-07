@@ -1,6 +1,6 @@
 import React from 'react'
 import { Alert } from 'react-bootstrap'
-import { useCP } from '../../hooks/CPContext'
+import { useCP } from '../../../hooks/CPContext'
 
 export default function Clashes() {
     const CP = useCP()

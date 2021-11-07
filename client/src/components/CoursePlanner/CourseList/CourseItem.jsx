@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef} from 'react';
-import { useCP, server } from '../../hooks/CPContext';
-import { CloseButton, Collapse,Card } from 'react-bootstrap';
+import { useCP, server } from '../../../hooks/CPContext';
+import { CloseButton, Collapse } from 'react-bootstrap';
 const randomColor = require('randomcolor');
 
 // Component: CourseList

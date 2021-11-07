@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { useCP, server } from "../../../hooks/CPContext";
 import SearchItem from "./SearchItem"
 import { FloatingLabel, Form } from "react-bootstrap";
