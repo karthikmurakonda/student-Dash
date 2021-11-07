@@ -95,25 +95,19 @@ function useProvideAuth() {
 	function usernameExists(username) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const response = await server.post('register', {
-					fname: '',
-					lname: '',
-					email: '',
-					username: username, 
-					password: ''
-				})
-				console.log(response);
-			} catch (error) {
-				console.log(error.response.data.name);
-				if (error.response.data.name === 'UserExistsError') {
-					console.log(true);
-					resolve(false)
-				}
-				else {
-					console.log(false);
-					resolve(true)
-				}
-			}
+                const response = await server.post('/usernameexists', {
+                    username: username
+                })
+                if (response.data.usernameExists){
+                    resolve(false)
+                }
+                else {
+                    resolve(true)
+                }
+            } catch (error) {
+                console.log(error.response);
+            }
+			
 			
 			// .catch((err) => {
 			// 	// console.log(err.response)

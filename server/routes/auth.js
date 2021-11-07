@@ -55,4 +55,9 @@ authRouter.post("/logout", passport.authenticate("session"), function (req, res)
 	res.sendStatus(202);
 });
 
+authRouter.post("/usernameexists", (req, res) => {
+	    usernameExists = await User.exists({username: req.body.username})
+	    res.send({usernameExists}).status(200)
+})
+
 module.exports = authRouter;
