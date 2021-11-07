@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef} from 'react';
 import { useCP, server } from '../../hooks/CPContext';
+import { CloseButton, Collapse,Card } from 'react-bootstrap';
 const randomColor = require('randomcolor');
 
 // Component: CourseList
@@ -11,13 +12,25 @@ const randomColor = require('randomcolor');
 function CourseItem({ course, id, disabled }) {
     const inputRef = useRef()
     const CP = useCP()
+    const [showInfo, setShowInfo] = useState(false)
+    const [courseInfo, setCourseInfo] = useState({})
+
+    useEffect(() => {
+        server.get('/'+id)
+            .then((res) => {
+                setCourseInfo(res.data)
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }, [])
 
     function getNearestDate(day, time) {
         const today = new Date();
         const dayOfWeek = today.getDay();
         const diff = day - dayOfWeek;
         if (diff >= 0) {
-            return new Date(today.getFullYear(), today.getMonth(), today.getDate() + diff+7, (time-(time%100))/100, time%100);
+            return new Date(today.getFullYear(), today.getMonth(), today.getDate() + diff + 7, (time-(time%100))/100, time%100);
         } else if (diff < 0) {
             return new Date(today.getFullYear(), today.getMonth(), today.getDate() + diff + 7, (time-(time%100))/100, time%100);
         }
@@ -36,37 +49,29 @@ function CourseItem({ course, id, disabled }) {
         calendars.push(newCalendar)
         CP.setCalendars([...calendars])
         // Add each class to schedule
-        let schedules = CP.schedules
-
-        server.get('/'+id)
-            .then((res) => {
-                res.data.course_timetable.map(myClass => {
-                    const newClass = {
-                        id: String(CP.schedules.length+1),
-                        calendarId: String(id),
-                        title: course,
-                        category: 'time',
-                        dueDateClass: '',
-                        start: getNearestDate(myClass.day, myClass.start_time).toISOString(),
-                        end: getNearestDate(myClass.day, myClass.end_time).toISOString(),
-                        bgColor: color,
-                        borderColor: color,
-                        color: '#ffffff',
-                        rawStart: myClass.start_time,
-                        rawEnd: myClass.end_time,
-                        rawDay: myClass.day,
-                        rawId: id
-                    }
-                    console.log(getNearestDate(myClass.day, myClass.start_time).toTimeString());
-                    let schedules = CP.schedules
-                    schedules.push(newClass)
-                    CP.setSchedules([...schedules])
-                    CP.getClashes()
-                })
-            })
-            .catch((err) => {
-                console.log(err);
-            })
+        courseInfo.course_timetable.map(myClass => {
+            const newClass = {
+                id: String(CP.schedules.length+1),
+                calendarId: String(id),
+                title: course,
+                category: 'time',
+                dueDateClass: '',
+                start: getNearestDate(myClass.day, myClass.start_time).toISOString(),
+                end: getNearestDate(myClass.day, myClass.end_time).toISOString(),
+                bgColor: color,
+                borderColor: color,
+                color: '#ffffff',
+                rawStart: myClass.start_time,
+                rawEnd: myClass.end_time,
+                rawDay: myClass.day,
+                rawId: id
+            }
+            let schedules = CP.schedules
+            schedules.push(newClass)
+            CP.setSchedules([...schedules])
+            CP.getClashes()
+            console.log(CP.clashes);
+        })
     }
 
     function removeCourse() {
@@ -93,12 +98,40 @@ function CourseItem({ course, id, disabled }) {
         }
     }
 
-    return (
-        <label className="list-group-item" >
-            <input ref={inputRef} onChange={handleSelect} className="form-check-input me-1" type="checkbox" value="" disabled={disabled} />
-            {course}
-        </label>
+    function handleRemove() {
+        removeCourse()
+        CP.deselectCourse(id)
+    }
 
+    return (
+        < >
+        <label className="list-group-item" >
+            <input ref={inputRef} onChange={handleSelect} className="form-check-input me-2" type="checkbox" value="" disabled={disabled} />
+            {course}
+            <a href="#" onClick={() => setShowInfo(!showInfo)} className="link-primary mx-1"><i className="bi bi-info-circle"></i></a>
+            <CloseButton className="float-end" onClick={handleRemove} />
+        </label>
+        <Collapse in={showInfo}>
+            <div className="list-group-item text-center">
+                <table className="table table-striped my-1">
+                    <tbody>
+                        <tr>
+                            <td>Credits:</td>
+                            <td>{courseInfo.course_credit}</td>
+                        </tr>
+                        <tr>
+                            <td>Mode:</td>
+                            <td>{courseInfo.course_venue}</td>
+                        </tr>
+                        <tr>
+                            <td>Instructor:</td>
+                            <td>{courseInfo.course_instructor}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </Collapse>
+        </>
     );
 }
 

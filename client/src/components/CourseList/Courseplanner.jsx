@@ -1,16 +1,19 @@
 import Timetable from "./Timetable";
 import CourseList from "./CourseList";
-import { Container, Row, Col, Collapse, Card } from 'react-bootstrap'
+import { Container, Row, Col, Collapse, Card, Modal } from 'react-bootstrap'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Loading from "../Loading/Loading"
 import { server, useCP } from "../../hooks/CPContext"
+import ListCourses from "./AddCourse/ListCourses"
 
 //render the component by function
 export default function Courseplanner() {
     const CP = useCP()
     const [showCoursesi, setShowCoursesi] = useState(false)
+    const [showCourseModal, setShowCourseModal] = useState(false)
+
     useEffect(() => {
         server.get("/", { params: { page: 1 } })
             .then((res) => {
@@ -40,6 +43,7 @@ export default function Courseplanner() {
 
     if (CP.courses) {
         return (
+            < >
             <Container fluid>
                 <Row>
                     <Col>
@@ -55,14 +59,23 @@ export default function Courseplanner() {
                         <Collapse in={showCoursesi}>
                             <Card>
                                 <Card.Body>
-                                    Select the courses you wish to take! Clashing or uneligible courses will be disabled.
+                                    Add courses you wish to take to this list and see how your schedule work out!
                                 </Card.Body>
                             </Card>
                         </Collapse>
-                        <CourseList />
+                        <CourseList handleAdd={()=>setShowCourseModal(true)} />
                     </Col>
                 </Row>
             </Container>
+            <Modal show={showCourseModal} centered onHide={()=>setShowCourseModal(false)} >
+                <Modal.Header closeButton>
+                    <Modal.Title>Add a Course</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <ListCourses />
+                </Modal.Body>
+            </Modal>
+            </>
         );
     }
     else {

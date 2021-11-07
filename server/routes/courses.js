@@ -7,7 +7,14 @@ const pick = require('../utlils/pick');
 
 courseRouter.get('/', async (req, res) => {
     // use pagination to paginate the results
-    const filter = pick(req.query, ['course_name', 'course_code']);
+    var filter = {}
+    if (req.query.course_name) {
+        var nameRegex = new RegExp(req.query.course_name);
+        filter = {$or: [{'course_name': {$regex: nameRegex, $options: 'i'}}, {'course_code': {$regex: nameRegex, $options: 'i'}}]}
+    }
+    else {
+        filter = pick(req.query, ['course_name', 'course_code']);
+    }
     const options = pick(req.query, ['sortBy', 'limit', 'page']);
     if (!req.query.sortBy) {
         options.sortBy = 'course_name';

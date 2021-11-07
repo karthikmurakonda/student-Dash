@@ -54,6 +54,7 @@ function useProvideCP() {
     const [schedules, setSchedules] = useState([])
     const [calendars, setCalendars] = useState([])
     const [clashes, setClashes] = useState([])
+    const [selectedCourses, setSelectedCourses] = useState([])
 
     function getClashes() {
         let clashes_local = []
@@ -79,8 +80,14 @@ function useProvideCP() {
         setClashes(clashes_local);
     }
 
+    function deselectCourse(id) {
+        let local = selectedCourses
+        local = local.filter(course => course.id !== id)
+        setSelectedCourses([...local])
+    }
 
-    return { courses, setCourses, schedules, setSchedules, calendars, setCalendars, clashes, getClashes }
+
+    return { courses, setCourses, schedules, setSchedules, calendars, setCalendars, clashes, getClashes, selectedCourses, setSelectedCourses, deselectCourse }
 }
 
 
