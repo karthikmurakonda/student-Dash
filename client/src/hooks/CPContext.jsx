@@ -59,7 +59,6 @@ function useProvideCP() {
     const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 
     function getClashes() {
-        console.log('run');
         let clashes_local = []
         for (let i = 0; i < 7; i++) {
             // get schedule for day = i

@@ -6,7 +6,6 @@ import { useLocation } from 'react-router-dom'
 export default function UserNavs() {
     const auth = useAuth()
     const location = useLocation()
-    console.log(location.pathname);
 
     if (auth.user) {
         return (
