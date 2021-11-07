@@ -1,25 +1,37 @@
-import { createContext, useContext, useState } from 'react'
+import { createContext, useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 
 export const server = axios.create({
-	baseURL: process.env.REACT_APP_SERVER_URL+'/courseplanner',
-	withCredentials: true
+    baseURL: process.env.REACT_APP_SERVER_URL + '/courseplanner',
+    withCredentials: true
 });
+
+
 
 const CPContext = createContext();
 
-export function CPProvider({children}) {
-	const CP = useProvideCP();
+export function CPProvider({ children }) {
+    const CP = useProvideCP();
 
-	return (
-		<CPContext.Provider value={CP}>
-			{children}
-		</CPContext.Provider>
-	)
+    return (
+        <CPContext.Provider value={CP}>
+            {children}
+        </CPContext.Provider>
+    )
 }
 
 export function useCP() {
-	return useContext(CPContext)
+    return useContext(CPContext)
+}
+
+// check if clashes is present already.
+function ispresent(clashes, id1, id2) {
+    for (let i = 0; i < clashes.length; i++) {
+        if ((clashes[i][0] === id1 && clashes[i][1] === id2) || (clashes[i][0] === id2 && clashes[i][1] === id1)) {
+            return true;
+        }
+    }
+    return false;
 }
 
 function useProvideCP() {
@@ -37,77 +49,38 @@ function useProvideCP() {
     //     }
     //     setIsLoading(false);
     // };
-    const today = new Date();
-    const getDate = (type, start, value, operator) => {
-        start = new Date(start);
-        type = type.charAt(0).toUpperCase() + type.slice(1);
-    
-        if (operator === '+') {
-          start[`set${type}`](start[`get${type}`]() + value);
-        } else {
-          start[`set${type}`](start[`get${type}`]() - value);
-        }
-    
-        return start;
-      };
 
     const [courses, setCourses] = useState()
-    const [schedules, setSchedules] = useState([
-        {
-          id: '1',
-          calendarId: '0',
-          title: 'TOAST UI Calendar Study',
-          category: 'time',
-          dueDateClass: '',
-          start: today.toISOString(),
-          end: getDate('hours', today, 3, '+').toISOString()
-        },
-        {
-          id: '2',
-          calendarId: '0',
-          title: 'Practice',
-          category: 'milestone',
-          dueDateClass: '',
-          start: getDate('date', today, 1, '+').toISOString(),
-          end: getDate('date', today, 1, '+').toISOString(),
-          isReadOnly: true
-        },
-        {
-          id: '3',
-          calendarId: '0',
-          title: 'FE Workshop',
-          category: 'allday',
-          dueDateClass: '',
-          start: getDate('date', today, 2, '-').toISOString(),
-          end: getDate('date', today, 1, '-').toISOString(),
-          isReadOnly: true
-        },
-        {
-          id: '4',
-          calendarId: '0',
-          title: 'Report',
-          category: 'time',
-          dueDateClass: '',
-          start: today.toISOString(),
-          end: getDate('hours', today, 1, '+').toISOString()
-        }
-      ])
-    const [calendars, setCalendars] = useState([
-        {
-          id: '0',
-          name: 'Private',
-          bgColor: '#9e5fff',
-          borderColor: '#9e5fff'
-        },
-        {
-          id: '1',
-          name: 'Company',
-          bgColor: '#00a9ff',
-          borderColor: '#00a9ff'
-        }
-      ])
+    const [schedules, setSchedules] = useState([])
+    const [calendars, setCalendars] = useState([])
+    const [clashes, setClashes] = useState([])
 
-    return { courses, setCourses, schedules, setSchedules, calendars, setCalendars }
+    function getClashes() {
+        let clashes_local = []
+        for (let i = 0; i < 7; i++) {
+            // get schedule for day = i
+            let schedules_copy = schedules
+            let daySchedule = schedules_copy.filter(schedule => schedule.rawDay === String(i));
+            // Set clashes for day = i if there are any clashes with start time and end time
+            for (let j = 0; j < daySchedule.length; j++) {
+                const cls1 = daySchedule[j];
+                for (let k = j; k < daySchedule.length; k++) {
+                    const cls2 = daySchedule[k];
+                    // if there is a start time inside a class.
+                    if ((j !== k) && ((cls2.rawStart >= cls1.rawStart && cls2.rawStart < cls1.end) || (cls1.rawStart >= cls2.rawStart && cls1.rawStart < cls2.end))) {
+                        // push to clashes if not already in clashes
+                        if (!ispresent(clashes_local, cls1.rawId, cls2.rawId)) {
+                            clashes_local.push([cls1.rawId, cls2.rawId]);
+                        }
+                    }
+                }
+            }
+        }
+        setClashes(clashes_local);
+    }
+
+
+    return { courses, setCourses, schedules, setSchedules, calendars, setCalendars, clashes, getClashes }
 }
 
 

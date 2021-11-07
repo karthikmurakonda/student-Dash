@@ -1,6 +1,5 @@
 import Timetable from "./Timetable";
 import CourseList from "./CourseList";
-import "./style.css";
 import { Container, Row, Col, Collapse, Card } from 'react-bootstrap'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import { useState, useEffect } from "react";
@@ -12,7 +11,6 @@ import { server, useCP } from "../../hooks/CPContext"
 export default function Courseplanner() {
     const CP = useCP()
     const [showCoursesi, setShowCoursesi] = useState(false)
-
     useEffect(() => {
         server.get("/", { params: { page: 1 } })
             .then((res) => {

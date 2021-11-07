@@ -17,7 +17,7 @@ function CourseItem({ course, id, disabled }) {
         const dayOfWeek = today.getDay();
         const diff = day - dayOfWeek;
         if (diff >= 0) {
-            return new Date(today.getFullYear(), today.getMonth(), today.getDate() + diff, (time-(time%100))/100, time%100);
+            return new Date(today.getFullYear(), today.getMonth(), today.getDate() + diff+7, (time-(time%100))/100, time%100);
         } else if (diff < 0) {
             return new Date(today.getFullYear(), today.getMonth(), today.getDate() + diff + 7, (time-(time%100))/100, time%100);
         }
@@ -35,7 +35,6 @@ function CourseItem({ course, id, disabled }) {
         let calendars = CP.calendars
         calendars.push(newCalendar)
         CP.setCalendars([...calendars])
-        
         // Add each class to schedule
         let schedules = CP.schedules
 
@@ -52,12 +51,17 @@ function CourseItem({ course, id, disabled }) {
                         end: getNearestDate(myClass.day, myClass.end_time).toISOString(),
                         bgColor: color,
                         borderColor: color,
-                        color: '#ffffff'
+                        color: '#ffffff',
+                        rawStart: myClass.start_time,
+                        rawEnd: myClass.end_time,
+                        rawDay: myClass.day,
+                        rawId: id
                     }
                     console.log(getNearestDate(myClass.day, myClass.start_time).toTimeString());
                     let schedules = CP.schedules
                     schedules.push(newClass)
                     CP.setSchedules([...schedules])
+                    CP.getClashes()
                 })
             })
             .catch((err) => {
@@ -73,8 +77,10 @@ function CourseItem({ course, id, disabled }) {
         
         // remove each class from schedule
         let schedules = CP.schedules
-        schedules = schedules.filter(schedule => schedule.calendarId !== id)
+        schedules = schedules.filter(schedule => schedule.calendarId !== id);
+        // set new schedules and get clashes
         CP.setSchedules(schedules);
+        CP.getClashes();
     }
 
     function handleSelect() {
