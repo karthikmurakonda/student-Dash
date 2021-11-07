@@ -55,6 +55,7 @@ function useProvideCP() {
     const [calendars, setCalendars] = useState([])
     const [clashes, setClashes] = useState([])
     const [selectedCourses, setSelectedCourses] = useState([])
+    const [totalCredits, setTotalCredits] = useState(0)
     const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 
     function getClashes() {
@@ -91,7 +92,7 @@ function useProvideCP() {
     }
 
 
-    return { courses, setCourses, schedules, setSchedules, calendars, setCalendars, clashes, getClashes, selectedCourses, setSelectedCourses, deselectCourse }
+    return { courses, setCourses, schedules, setSchedules, calendars, setCalendars, clashes, getClashes, selectedCourses, setSelectedCourses, deselectCourse, totalCredits, setTotalCredits }
 }
 
 

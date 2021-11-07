@@ -69,6 +69,7 @@ function CourseItem({ course, id, disabled }) {
             let schedules = CP.schedules
             schedules.push(newClass)
             CP.setSchedules([...schedules])
+            CP.setTotalCredits(CP.totalCredits+courseInfo.course_credit)
         })
     }
 
@@ -83,6 +84,7 @@ function CourseItem({ course, id, disabled }) {
         schedules = schedules.filter(schedule => schedule.calendarId !== id);
         // set new schedules and get clashes
         CP.setSchedules(schedules);
+        CP.setTotalCredits(CP.totalCredits-courseInfo.course_credit)
     }
 
     function handleSelect() {

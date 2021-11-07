@@ -1,6 +1,6 @@
 import Timetable from "./Timetable";
 import CourseList from "./CourseList";
-import { Container, Row, Col, Collapse, Card, Modal, Alert } from 'react-bootstrap'
+import { Container, Row, Col, Collapse, Card, Modal, Alert, Badge } from 'react-bootstrap'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import { useState, useEffect } from "react";
 import axios from "axios";
@@ -48,17 +48,17 @@ export default function Courseplanner() {
     if (CP.courses) {
         return (
             < >
-            <Container fluid>
-                <Row>
-                    <Col>
-                        <h1>Courseplanner</h1>
-                    </Col>
-                </Row>
+            <Container className='mt-3' fluid>
                 <Row>
                     <Col lg='10'>
                         <Timetable />
                     </Col>
                     <Col lg='2' className='px-3'>
+                        {CP.totalCredits? (
+                            <Card className='my-2'>
+                                <Card.Body className='p-2 text-center'>Current Credits: <Badge className='mx-1' bg="dark">{CP.totalCredits}</Badge></Card.Body>
+                            </Card>
+                        ):<></>}
                         <h3>Courses <a href="#" onClick={() => setShowCoursesi(!showCoursesi)} className="link-primary h5"><i className="bi bi-info-circle"></i></a></h3>
                         <Collapse in={showCoursesi}>
                             <Card>
