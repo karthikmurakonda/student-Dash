@@ -15,7 +15,6 @@ function CourseList() {
         if (searchRef.current.value === '') {
             server.get("/", { params: { page: 1 } })
                 .then((res) => {
-                    console.log(res.data)
                     CP.setCourses(res.data.results)
                 })
                 .catch((err) => {

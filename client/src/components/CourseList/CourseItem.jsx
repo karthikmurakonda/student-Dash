@@ -61,16 +61,14 @@ function CourseItem({ course, id, disabled }) {
                 bgColor: color,
                 borderColor: color,
                 color: '#ffffff',
-                rawStart: myClass.start_time,
-                rawEnd: myClass.end_time,
-                rawDay: myClass.day,
+                rawStart: parseInt(myClass.start_time),
+                rawEnd: parseInt(myClass.end_time),
+                rawDay: parseInt(myClass.day),
                 rawId: id
             }
             let schedules = CP.schedules
             schedules.push(newClass)
             CP.setSchedules([...schedules])
-            CP.getClashes()
-            console.log(CP.clashes);
         })
     }
 
@@ -85,7 +83,6 @@ function CourseItem({ course, id, disabled }) {
         schedules = schedules.filter(schedule => schedule.calendarId !== id);
         // set new schedules and get clashes
         CP.setSchedules(schedules);
-        CP.getClashes();
     }
 
     function handleSelect() {

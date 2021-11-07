@@ -55,23 +55,27 @@ function useProvideCP() {
     const [calendars, setCalendars] = useState([])
     const [clashes, setClashes] = useState([])
     const [selectedCourses, setSelectedCourses] = useState([])
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday']
 
     function getClashes() {
+        console.log('run');
         let clashes_local = []
         for (let i = 0; i < 7; i++) {
             // get schedule for day = i
             let schedules_copy = schedules
-            let daySchedule = schedules_copy.filter(schedule => schedule.rawDay === String(i));
+            let daySchedule = schedules_copy.filter(schedule => schedule.rawDay === i);
             // Set clashes for day = i if there are any clashes with start time and end time
             for (let j = 0; j < daySchedule.length; j++) {
                 const cls1 = daySchedule[j];
-                for (let k = j; k < daySchedule.length; k++) {
+                for (let k = 0; k < daySchedule.length; k++) {
                     const cls2 = daySchedule[k];
                     // if there is a start time inside a class.
-                    if ((j !== k) && ((cls2.rawStart >= cls1.rawStart && cls2.rawStart < cls1.end) || (cls1.rawStart >= cls2.rawStart && cls1.rawStart < cls2.end))) {
-                        // push to clashes if not already in clashes
-                        if (!ispresent(clashes_local, cls1.rawId, cls2.rawId)) {
-                            clashes_local.push([cls1.rawId, cls2.rawId]);
+                    if (j != k) {
+                        if ((cls1.rawStart <= cls2.rawStart) && (cls2.rawStart < cls1.rawEnd)) {
+                            // push to clashes if not already in clashes
+                            if (!ispresent(clashes_local, cls1.title, cls2.title, days[i])) {
+                                clashes_local.push([cls1.title, cls2.title, days[i]]);
+                            }
                         }
                     }
                 }

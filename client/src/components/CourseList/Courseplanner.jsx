@@ -1,12 +1,13 @@
 import Timetable from "./Timetable";
 import CourseList from "./CourseList";
-import { Container, Row, Col, Collapse, Card, Modal } from 'react-bootstrap'
+import { Container, Row, Col, Collapse, Card, Modal, Alert } from 'react-bootstrap'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import { useState, useEffect } from "react";
 import axios from "axios";
 import Loading from "../Loading/Loading"
 import { server, useCP } from "../../hooks/CPContext"
 import ListCourses from "./AddCourse/ListCourses"
+import Clashes from "./Clashes";
 
 //render the component by function
 export default function Courseplanner() {
@@ -17,13 +18,16 @@ export default function Courseplanner() {
     useEffect(() => {
         server.get("/", { params: { page: 1 } })
             .then((res) => {
-                console.log(res.data)
                 CP.setCourses(res.data.results)
             })
             .catch((err) => {
                 console.log(err);
             })
     }, [])
+
+    useEffect(() => {
+        CP.getClashes()
+    }, [CP.schedules])
 
     // dummy props
     // const courses = [
@@ -64,6 +68,7 @@ export default function Courseplanner() {
                             </Card>
                         </Collapse>
                         <CourseList handleAdd={()=>setShowCourseModal(true)} />
+                        <Clashes />
                     </Col>
                 </Row>
             </Container>
