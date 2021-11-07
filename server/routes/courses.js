@@ -19,7 +19,7 @@ courseRouter.get('/', async (req, res) => {
     if (!req.query.sortBy) {
         options.sortBy = 'course_name';
     }
-    res.send( await Courses.paginate(filter, options, 'course_name'));
+    res.send( await Courses.paginate(filter, options, ['course_name', 'course_code']));
 });
 // Create a new course
 courseRouter.post('/',passport.authenticate("session") ,(req, res) => {
