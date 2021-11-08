@@ -48,11 +48,15 @@ export default function Courseplanner() {
         return (
             < >
             <Container className='mt-3' fluid>
+                <Row className='px-2'>
+                    <Clashes />
+                </Row>
                 <Row>
-                    <Col lg='10'>
+                    <Col lg='8'>
                         <Timetable />
                     </Col>
-                    <Col lg='2' className='px-3'>
+                    
+                    <Col lg='4' className='px-3'>
                         {CP.totalCredits? (
                             <Card className='my-2'>
                                 <Card.Body className='p-2 text-center'>Current Credits: <Badge className='mx-1' bg="dark">{CP.totalCredits}</Badge></Card.Body>
@@ -67,7 +71,7 @@ export default function Courseplanner() {
                             </Card>
                         </Collapse>
                         <CourseList handleAdd={()=>setShowCourseModal(true)} />
-                        <Clashes />
+                        
                     </Col>
                 </Row>
             </Container>
