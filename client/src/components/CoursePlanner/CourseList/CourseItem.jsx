@@ -87,6 +87,22 @@ function CourseItem({ course, id, disabled }) {
         CP.setTotalCredits(CP.totalCredits-courseInfo.course_credit)
     }
 
+    function removeFromList() {
+        let calendars = CP.calendars
+        // remove item from array when id matches
+        const currCal = calendars.filter(calendar => calendar.id === id)
+        calendars = calendars.filter(calendar => calendar.id !== id)
+        CP.setCalendars(calendars);
+        // remove each class from schedule
+        let schedules = CP.schedules
+        schedules = schedules.filter(schedule => schedule.calendarId !== id);
+        // set new schedules and get clashes
+        CP.setSchedules(schedules);
+        if(currCal.length > 0) {
+            CP.setTotalCredits(CP.totalCredits-courseInfo.course_credit)
+        }
+    }
+
     function handleSelect() {
         const input = inputRef.current
         if (input.checked) {
@@ -98,7 +114,7 @@ function CourseItem({ course, id, disabled }) {
     }
 
     function handleRemove() {
-        removeCourse()
+        removeFromList()
         CP.deselectCourse(id)
     }
 
