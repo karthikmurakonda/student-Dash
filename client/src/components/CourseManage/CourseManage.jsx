@@ -9,6 +9,8 @@ import axios from 'axios';
 export default function CourseManage() {
     const [showModal, setShowModal] = useState(false)
     const [classes, setClasses] = useState([])
+    const [success, setSuccess] = useState(false)
+    const [failure, setFailure] = useState(false)
     const server = axios.create({
         baseURL: process.env.REACT_APP_SERVER_URL + '/courseplanner',
         withCredentials: true
@@ -21,7 +23,7 @@ export default function CourseManage() {
         instructor: yup.string().required('Required!')
 	})
 
-	function login(values) {
+	function login(values, {resetForm}) {
         const newCourse = {
             course_name: values.name,
             course_code: values.code,
@@ -32,10 +34,12 @@ export default function CourseManage() {
 
         server.post("/", newCourse)
             .then((res) => {
-                console.log(res);
+                setSuccess(true)
+                resetForm()
+                setClasses([])
             })
             .catch((err) => {
-                console.log(err);
+                setFailure(true)
             })
 	}
 
@@ -44,6 +48,8 @@ export default function CourseManage() {
 		<Container>
 			<Row className="justify-content-center my-4">
 				<Col lg="10">
+                    <Alert variant="danger mx-5" show={failure} onClose={() => setFailure(false)} dismissible>Something went wrong!</Alert>
+                    <Alert variant="success mx-5" show={success} onClose={() => setSuccess(false)} dismissible>Course added successfully!</Alert>
 					<h1 className="mx-5 my-4">Add a New Course</h1>
 					<Formik validationSchema={schema} onSubmit={login} initialValues={{name: '', code: '', credits: '', instructor: ''}}>
 						{({handleSubmit, handleChange, handleBlur, values, touched, isValid, errors, dirty}) => (
