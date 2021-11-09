@@ -4,7 +4,7 @@ const express = require('express');
 const postRouter = express.Router();
 const pick = require('../utlils/pick');
 
-postRouter.get('/',passport.authenticate('session'), async (req, res) => {
+postRouter.get('/', passport.authenticate('session'), async (req, res) => {
     if(req.user){
         const filter = pick(req.query, ['author'])
         const options = pick(req.query, ['sortBy', 'limit', 'skip', 'populate', 'page'])
