@@ -1,9 +1,11 @@
 // Rout to auth.js if the endpoint is /auth
 authRouter=require('./auth');
-courseRouter = require('./courses')
+postRouter = require('./posts');
+courseRouter = require('./courses');
 const express = require('express');
 const router = express.Router();
 
 router.use('/auth', authRouter);
-router.use('/courseplanner',courseRouter)
+router.use('/courseplanner',courseRouter);
+router.use('/post',postRouter);
 module.exports = router;

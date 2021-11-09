@@ -25,3 +25,4 @@ yarn-error.log*
 *.sublime-*
 .env
 makefile
+client/.vscode/settings.json
