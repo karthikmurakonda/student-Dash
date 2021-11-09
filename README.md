@@ -90,6 +90,9 @@ It has all the server side code especially the database and authentication. Buil
 ## Setup
 See [SETUP.md](./SETUP.md) to setup the project.
 
+## Heroku
+We have hosted the project on [heroku](https://studentdash.herokuapp.com/).
+
 ## Github
 Check our [github](https://github.com/karthikmurakonda/student-Dash) page.
 
