@@ -8,7 +8,7 @@ export default function AdminRoute({ children, ...rest }) {
     
     if (auth.userSet) {
         if (auth.user) {
-            if (auth.user.role == 1 || auth.user.role == 2) {
+            if (auth.user.role === 1 || auth.user.role === 2) {
                 return (<Route {...rest} render={() => (children)} />)
             }
             else {

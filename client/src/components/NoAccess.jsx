@@ -1,4 +1,4 @@
-import { Col, Container, Row, Alert, Button } from "react-bootstrap";
+import { Col, Container, Row, Alert } from "react-bootstrap";
 
 export default function Loading() {
     return (

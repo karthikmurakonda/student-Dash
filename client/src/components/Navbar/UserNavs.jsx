@@ -1,7 +1,6 @@
 import React from 'react'
 import { useAuth } from '../../hooks/AuthContext'
 import { Nav } from 'react-bootstrap'
-import { useLocation } from 'react-router-dom'
 
 export default function UserNavs() {
     const auth = useAuth()

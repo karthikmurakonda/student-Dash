@@ -6,7 +6,6 @@ const days = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
 
 export default function Post({post}) {
     var date = new Date(post.createdAt)
-    var timeString = date.getHours()
 
     function to12hour(hours, mins) {
         if (hours > 12) {

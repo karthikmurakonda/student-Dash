@@ -1,7 +1,6 @@
 import React from 'react'
 import { useAuth } from '../../hooks/AuthContext'
-import { Nav, NavDropdown } from 'react-bootstrap'
-import { Link } from 'react-router-dom'
+import { NavDropdown } from 'react-bootstrap'
 import { useHistory } from 'react-router'
 
 export default function AdminNavs() {

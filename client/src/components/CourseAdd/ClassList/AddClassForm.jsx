@@ -1,7 +1,7 @@
 import React from 'react'
 import { Formik } from 'formik'
 import * as yup from 'yup'
-import { Alert, Form, Button, Container, Row, Col, FloatingLabel, Modal } from 'react-bootstrap'
+import { Form, Button, FloatingLabel } from 'react-bootstrap'
 
 export default function AddClassForm({classes, setClasses, setShowModal}) {
 
