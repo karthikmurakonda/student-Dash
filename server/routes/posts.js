@@ -4,7 +4,7 @@ const express = require('express');
 const postRouter = express.Router();
 const pick = require('../utlils/pick');
 
-postRouter.get('/',passport.authenticate('session'), async (req, res) => {
+postRouter.get('/', passport.authenticate('session'), async (req, res) => {
     if(req.user){
         const filter = pick(req.query, ['author'])
         const options = pick(req.query, ['sortBy', 'limit', 'skip', 'populate', 'page'])
@@ -52,35 +52,39 @@ postRouter.delete('/:id', passport.authenticate('session'), (req, res) => {
         if (req.user.role === 1 || req.user.role === 2) {
             Post.findByIdAndRemove(req.params.id, (err, post) => {
                 if (err) {
-                res.send(err);
+                    res.send(err);
                 }
                 if(post){
-                res.sendStatus(204);
+                    res.sendStatus(204);
                 }
                 else{
-                res.sendStatus(404);
+                    res.sendStatus(404);
                 }
             });
         }
         else {
-            const post = Post.findById(req.params.id);
-            console.log(post);
-            if(post){
-                if (post.authorId === req.user.id) {
-                    Post.findByIdAndDelete(req.params.id, (err, post) => {
-                        if (err) {
-                        res.send(err);
-                        }
-                        res.sendStatus(204);
-                    });
+            Post.findById(req.params.id, (err, post) => {
+                if (post) {
+                    console.log(post.authorId, req.user.id);
+                    if (post.authorId.equals(req.user.id)) {
+                        Post.findByIdAndDelete(req.params.id, (err, post) => {
+                            if (err) {
+                            res.send(err);
+                            }
+                            res.sendStatus(204);
+                        });
+                    }
+                    else {
+                        res.sendStatus(403);
+                    }
+                }
+                else if (err) {
+                    res.send(err);
                 }
                 else {
-                    res.sendStatus(403);
+                    res.sendStatus(404);
                 }
-            }
-            else {
-                res.sendStatus(404);
-            }
+            })
         }
     }
     else {

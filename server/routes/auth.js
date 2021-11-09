@@ -30,7 +30,8 @@ authRouter.post("/register", (req, res) => {
 authRouter.post("/login", 
 	passport.authenticate("local", { failWithError: true }), 
 	(req, res) => {
-		res.status(200).send({user: req.user.username})
+		userData = (({ fname, lname, email, username, role, _id }) => ({ fname, lname, email, username, role, _id }))(req.user)
+		res.status(200).send({user: userData})
 	},
 	(err, req, res, next) => {
 		res.send(err.message).status(err.status)
@@ -39,8 +40,8 @@ authRouter.post("/login",
 
 authRouter.get("/login", passport.authenticate("session"), (req, res) => {
 	if (req.isAuthenticated()) {
-		const user =  User.findOne({ username : req.user.username })
-		res.send({isAuth: true, user: req.user.username, id : user.id }).status(200)
+		userData = (({ fname, lname, email, username, role, _id }) => ({ fname, lname, email, username, role, _id }))(req.user)
+		res.send({isAuth: true, user: userData}).status(200)
 	}
 	else {
 		res.send({isAuth: false}).status(200)
