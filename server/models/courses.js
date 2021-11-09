@@ -29,7 +29,8 @@ const courseSchema = new Schema({
 
     course_venue: {
         type: String,
-        required: true
+        required: true,
+        default: "offline"
     },
     course_instructor: {
         type: String,

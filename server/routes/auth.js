@@ -17,7 +17,6 @@ authRouter.post("/register", (req, res) => {
 
 	User.register(new User({ fname: fname, lname: lname, email : email, username: username, rollNumber: rollNumber}), password, (err, user) => {
 		if (err) {
-			console.log("MyError: ", err);
 			return res.status(401).send(err);
 		}
 
@@ -31,8 +30,8 @@ authRouter.post("/register", (req, res) => {
 authRouter.post("/login", 
 	passport.authenticate("local", { failWithError: true }), 
 	(req, res) => {
-		console.log(req.session.messages)
-		res.status(200).send({user: req.user.username})
+		userData = (({ fname, lname, email, username, role, _id }) => ({ fname, lname, email, username, role, _id }))(req.user)
+		res.status(200).send({user: userData})
 	},
 	(err, req, res, next) => {
 		res.send(err.message).status(err.status)
@@ -41,7 +40,8 @@ authRouter.post("/login",
 
 authRouter.get("/login", passport.authenticate("session"), (req, res) => {
 	if (req.isAuthenticated()) {
-		res.send({isAuth: true, user: req.user.username}).status(200)
+		userData = (({ fname, lname, email, username, role, _id }) => ({ fname, lname, email, username, role, _id }))(req.user)
+		res.send({isAuth: true, user: userData}).status(200)
 	}
 	else {
 		res.send({isAuth: false}).status(200)
@@ -54,5 +54,10 @@ authRouter.post("/logout", passport.authenticate("session"), function (req, res)
 	req.logout();
 	res.sendStatus(202);
 });
+
+authRouter.post("/usernameexists", async (req, res) => {
+	    usernameExists = await User.exists({username: req.body.username})
+	    res.send({usernameExists}).status(200)
+})
 
 module.exports = authRouter;

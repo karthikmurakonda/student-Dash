@@ -31,8 +31,6 @@
         ret.id = ret._id.toString();
         delete ret._id;
         delete ret.__v;
-        delete ret.createdAt;
-        delete ret.updatedAt;
         if (transform) {
           return transform(doc, ret, options);
         }

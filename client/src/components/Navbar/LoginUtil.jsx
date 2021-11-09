@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Nav, NavDropdown, Button } from 'react-bootstrap'
 import { useHistory } from 'react-router'
 import { useAuth } from '../../hooks/AuthContext'
@@ -6,8 +6,9 @@ import { useAuth } from '../../hooks/AuthContext'
 export default function LoginUtil() {
     const auth = useAuth()
     const history = useHistory()
-
-    auth.checkauth()
+    useEffect(() => {
+        auth.checkauth()
+    }, [])
 
     function login() {
         history.push('/login')
@@ -20,7 +21,7 @@ export default function LoginUtil() {
     if (auth.user) {
         return (
             <Nav>
-                <NavDropdown align="end" title={auth.user}>
+                <NavDropdown align="end" title={auth.user.username}>
                     <NavDropdown.Item onClick={auth.logout}>Logout</NavDropdown.Item>
                 </NavDropdown>
             </Nav>

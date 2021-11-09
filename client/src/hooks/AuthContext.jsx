@@ -25,8 +25,7 @@ export function useAuth() {
 
 function useProvideAuth() {
 	const [user, setUser] = useState();
-	const [resp, setResp] = useState();
-	const [regResp, setRegResp] = useState()
+	const [userSet, setUserSet] = useState(false)
 	const location = useLocation();
 	const history = useHistory();
 
@@ -34,13 +33,14 @@ function useProvideAuth() {
 		server.get('/login')
 			.then((res) => {
 				if (res.data.isAuth) {
-					console.log('User is logged in :', res.data.user)
+					// console.log('User is logged in :', res.data.user)
 					setUser(res.data.user);
 				}
 				else {
-					console.log('User is not logged in!')
+					// console.log('User is not logged in!')
 					setUser()
 				}
+				setUserSet(true)
 			})
 			.catch((err) => {
 				console.log(err);
@@ -49,8 +49,6 @@ function useProvideAuth() {
 
 	function login(username, password, setShowAlert) {
 		let { from } = location.state || { from: { pathname: "/" } }
-
-		setResp()
 
 		server.post('/login', {
 			username: username, 
@@ -68,7 +66,7 @@ function useProvideAuth() {
 	function logout() {
 		server.post('/logout')
 			.then(res => {
-				console.log("Logged Out")
+				history.push('/')
 				setUser();
 			})
 			.catch(err => {
@@ -95,40 +93,20 @@ function useProvideAuth() {
 	function usernameExists(username) {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const response = await server.post('register', {
-					fname: '',
-					lname: '',
-					email: '',
-					username: username, 
-					password: ''
-				})
-				console.log(response);
-			} catch (error) {
-				console.log(error.response.data.name);
-				if (error.response.data.name === 'UserExistsError') {
-					console.log(true);
-					resolve(false)
-				}
-				else {
-					console.log(false);
-					resolve(true)
-				}
-			}
-			
-			// .catch((err) => {
-			// 	// console.log(err.response)
-			// 	console.log(err.response.name)
-			// 	if (err.response.name === 'UserExistsError') {
-			// 		console.log(false)
-			// 		resolve(false)
-			// 	}
-			// 	else {
-			// 		console.log(true);
-			// 		resolve(true)
-			// 	}
-			// })
+            	const response = await server.post('/usernameexists', {
+                    username: username
+                })
+                if (response.data.usernameExists){
+                    resolve(false)
+                }
+                else {
+                    resolve(true)
+                }
+            } catch (error) {
+                console.log(error.response);
+            }
 		})
 	}
 
-	return {user, resp, setResp, login, logout, register, checkauth, usernameExists}
+	return {user, userSet, login, logout, register, checkauth, usernameExists}
 }
