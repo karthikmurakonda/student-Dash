@@ -16,6 +16,9 @@ To install the backend dependancies open a terminal in the `/server/` folder and
 npm i
 ```
 
+## Set environmental variables
+Make .env files in both server and client folder. Example files have already been provided.
+
 ## Run the Project
 To run the project make sure mongoDB is running, if not start it. Post this you may start the backend server by running the following command in the folder `/server/`
 ```
