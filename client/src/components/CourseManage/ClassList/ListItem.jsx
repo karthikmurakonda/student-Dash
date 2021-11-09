@@ -15,8 +15,8 @@ export default function ListItem({myClass, classes, setClasses}) {
             <Container fluid>
                 <Row>
                     <Col>On {days[myClass.day]}</Col>
-                    <Col>from {(myClass.start-myClass.start%100)/100}:{myClass.start%100? myClass.start%100 : "00"}</Col>
-                    <Col>to {(myClass.end-myClass.end%100)/100}:{myClass.end%100? myClass.end%100 : "00"}</Col>
+                    <Col>from {(myClass.start_time-myClass.start_time%100)/100}:{myClass.start_time%100? myClass.start_time%100 : "00"}</Col>
+                    <Col>to {(myClass.end_time-myClass.end_time%100)/100}:{myClass.end_time%100? myClass.end_time%100 : "00"}</Col>
                     <CloseButton className="float-end" onClick={handleRemove} />
                 </Row>
             </Container>
