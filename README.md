@@ -6,8 +6,8 @@ A college-centric networking site that offers academic, cultural and social medi
 
 Our project is mainly divided into two main parts:
 
-- 1.client-side: the front-end part of the app.
-- 2.server-side: the back-end part of the app.
+- client-side: the front-end part of the app.
+- server-side: the back-end part of the app.
 
 Our client and server are separated and communicate via a RESTful API.
 See [client](./Client/README.md) and [server](./Client/README.md) for more details.
