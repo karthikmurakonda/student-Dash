@@ -39,7 +39,8 @@ authRouter.post("/login",
 
 authRouter.get("/login", passport.authenticate("session"), (req, res) => {
 	if (req.isAuthenticated()) {
-		res.send({isAuth: true, user: req.user.username}).status(200)
+		const user =  User.findOne({ username : req.user.username })
+		res.send({isAuth: true, user: req.user.username, id : user.id }).status(200)
 	}
 	else {
 		res.send({isAuth: false}).status(200)
