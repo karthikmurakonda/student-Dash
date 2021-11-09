@@ -41,7 +41,7 @@ export default function Posts() {
                             </Col>
                         </Row>
                         {posts.length? posts.map((post) => (
-                            <Post post={post} />
+                            <Post post={post} update={update} setUpdate={setUpdate} />
                         )) : (
                             <Alert variant="info" className="text-center">No posts here!</Alert>
                         )}
