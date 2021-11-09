@@ -90,6 +90,9 @@ It has all the server side code especially the database and authentication. Buil
 ## Setup
 See [SETUP.md](./SETUP.md) to setup the project.
 
+## Github
+Check our [github](https://github.com/karthikmurakonda/student-Dash) page.
+
 ## Contributors
 - [Om Patil](https://www.github.com/mordernoctave)
 - [Karthik mv ](https://www.github.com/karthikmurakonda)
