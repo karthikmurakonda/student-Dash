@@ -98,8 +98,8 @@ We have hosted the project on [heroku](https://studentdash.herokuapp.com/).
 Check our [github](https://github.com/karthikmurakonda/student-Dash) page.
 
 ## Contributors
-- [Om Patil](https://www.github.com/mordernoctave)
+- [Om Patil](https://www.github.com/modernoctave)
 - [Karthik mv ](https://www.github.com/karthikmurakonda)
-- [Vidyasagar S](https://https://github.com/Vss4969)
+- [Vidyasagar S](https://github.com/Vss4969)
 
 Pull requests are welcome!
