@@ -22,7 +22,7 @@ function CourseList() {
                 })
         }
         else {
-            server.get("/", { params: { page: 1, course_name: searchRef.current.value } })
+            server.get("/", { params: { page: 1, search: searchRef.current.value } })
                 .then((res) => {
                     console.log(res.data)
                     CP.setCourses(res.data)
