@@ -84,9 +84,9 @@ function useProvideCP() {
         setClashes(clashes_local);
     }
 
-    function deselectCourse(id) {
+    function deselectCourse(code) {
         let local = selectedCourses
-        local = local.filter(course => course.id !== id)
+        local = local.filter(course => course.code !== code)
         setSelectedCourses([...local])
     }
 

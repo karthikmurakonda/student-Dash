@@ -17,7 +17,7 @@ export default function Courseplanner() {
     useEffect(() => {
         server.get("/", { params: { page: 1 } })
             .then((res) => {
-                CP.setCourses(res.data.results)
+                CP.setCourses(res.data)
             })
             .catch((err) => {
                 console.log(err);

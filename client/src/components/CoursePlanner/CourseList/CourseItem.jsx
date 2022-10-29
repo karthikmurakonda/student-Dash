@@ -9,14 +9,14 @@ const randomColor = require('randomcolor');
 // 		and allows the user to select them.
 // 		The list is filtered by the user's search term.
 
-function CourseItem({ course, id, disabled }) {
+function CourseItem({ course, code, disabled }) {
     const inputRef = useRef()
     const CP = useCP()
     const [showInfo, setShowInfo] = useState(false)
     const [courseInfo, setCourseInfo] = useState({})
 
     useEffect(() => {
-        server.get('/'+id)
+        server.get('/'+code)
             .then((res) => {
                 setCourseInfo(res.data)
             })
@@ -38,9 +38,9 @@ function CourseItem({ course, id, disabled }) {
 
     function addCourse() {
         // Add new calendar for the course
-        var color = randomColor({ luminosity: 'dark', seed: id })
+        var color = randomColor({ luminosity: 'dark', seed: code })
         const newCalendar = {
-            id: String(id),
+            code: String(code),
             name: course,
             bgColor: color,
             borderColor: color
@@ -51,8 +51,8 @@ function CourseItem({ course, id, disabled }) {
         // Add each class to schedule
         courseInfo.course_timetable.map(myClass => {
             const newClass = {
-                id: String(CP.schedules.length+1),
-                calendarId: String(id),
+                code: String(CP.schedules.length+1),
+                calendarcode: String(code),
                 title: course,
                 category: 'time',
                 dueDateClass: '',
@@ -64,7 +64,7 @@ function CourseItem({ course, id, disabled }) {
                 rawStart: parseInt(myClass.start_time),
                 rawEnd: parseInt(myClass.end_time),
                 rawDay: parseInt(myClass.day),
-                rawId: id
+                rawcode: code
             }
             let schedules = CP.schedules
             schedules.push(newClass)
@@ -75,13 +75,13 @@ function CourseItem({ course, id, disabled }) {
 
     function removeCourse() {
         let calendars = CP.calendars
-        // remove item from array when id matches
-        calendars = calendars.filter(calendar => calendar.id !== id)
+        // remove item from array when code matches
+        calendars = calendars.filter(calendar => calendar.code !== code)
         CP.setCalendars(calendars);
         
         // remove each class from schedule
         let schedules = CP.schedules
-        schedules = schedules.filter(schedule => schedule.calendarId !== id);
+        schedules = schedules.filter(schedule => schedule.calendarcode !== code);
         // set new schedules and get clashes
         CP.setSchedules(schedules);
         CP.setTotalCredits(CP.totalCredits-courseInfo.course_credit)
@@ -89,13 +89,13 @@ function CourseItem({ course, id, disabled }) {
 
     function removeFromList() {
         let calendars = CP.calendars
-        // remove item from array when id matches
-        const currCal = calendars.filter(calendar => calendar.id === id)
-        calendars = calendars.filter(calendar => calendar.id !== id)
+        // remove item from array when code matches
+        const currCal = calendars.filter(calendar => calendar.code === code)
+        calendars = calendars.filter(calendar => calendar.code !== code)
         CP.setCalendars(calendars);
         // remove each class from schedule
         let schedules = CP.schedules
-        schedules = schedules.filter(schedule => schedule.calendarId !== id);
+        schedules = schedules.filter(schedule => schedule.calendarcode !== code);
         // set new schedules and get clashes
         CP.setSchedules(schedules);
         if(currCal.length > 0) {
@@ -115,7 +115,7 @@ function CourseItem({ course, id, disabled }) {
 
     function handleRemove() {
         removeFromList()
-        CP.deselectCourse(id)
+        CP.deselectCourse(code)
     }
 
     return (
@@ -132,15 +132,15 @@ function CourseItem({ course, id, disabled }) {
                     <tbody>
                         <tr>
                             <td>Credits:</td>
-                            <td>{courseInfo.course_credit}</td>
+                            <td>{courseInfo.credits}</td>
                         </tr>
                         <tr>
                             <td>Mode:</td>
-                            <td>{courseInfo.course_venue}</td>
+                            <td>{courseInfo.venue}</td>
                         </tr>
                         <tr>
                             <td>Instructor:</td>
-                            <td>{courseInfo.course_instructor}</td>
+                            <td>{courseInfo.instructor}</td>
                         </tr>
                     </tbody>
                 </table>

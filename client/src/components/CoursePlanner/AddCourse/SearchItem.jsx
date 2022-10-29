@@ -7,7 +7,7 @@ import { useCP } from '../../../hooks/CPContext';
 // 		and allows the user to select them.
 // 		The list is filtered by the user's search term.
 
-export default function SearchItem({ course, id, disabled }) {
+export default function SearchItem({ course, code, disabled }) {
     const inputRef = useRef()
     const CP = useCP()
     const [selected, setSelected] = useState(false)
@@ -15,7 +15,7 @@ export default function SearchItem({ course, id, disabled }) {
 
     useEffect(() => {
         let selectedCourses = CP.selectedCourses
-        selectedCourses = selectedCourses.filter(course => course.id === id)
+        selectedCourses = selectedCourses.filter(course => course.code === code)
         if (selectedCourses.length) {
             setSelected(true)
             setInit(true)
@@ -34,7 +34,7 @@ export default function SearchItem({ course, id, disabled }) {
     }
 
     function removeCourse() {
-        CP.deselectCourse(id)
+        CP.deselectCourse(code)
         setSelected(false)
     }
 
@@ -52,7 +52,7 @@ export default function SearchItem({ course, id, disabled }) {
         return (
             <label className="list-group-item" >
                 <input ref={inputRef} onChange={handleSelect} className="form-check-input me-2" type="checkbox" value="" disabled={disabled} checked={selected} />
-                {course.course_code}: {course.course_name}
+                {course.code}: {course.name}
             </label>
         )
     }

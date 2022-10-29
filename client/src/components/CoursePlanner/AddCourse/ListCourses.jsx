@@ -15,7 +15,7 @@ function CourseList() {
         if (searchRef.current.value === '') {
             server.get("/", { params: { page: 1 } })
                 .then((res) => {
-                    CP.setCourses(res.data.results)
+                    CP.setCourses(res.data)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -25,7 +25,7 @@ function CourseList() {
             server.get("/", { params: { page: 1, course_name: searchRef.current.value } })
                 .then((res) => {
                     console.log(res.data)
-                    CP.setCourses(res.data.results)
+                    CP.setCourses(res.data)
                 })
                 .catch((err) => {
                     console.log(err);
@@ -41,7 +41,7 @@ function CourseList() {
         </FloatingLabel>
         <div className="list-group py-2">
             {CP.courses.map(course => (
-                <SearchItem key={course.id} id ={course.id} course={course} disabled={false} />
+                <SearchItem key={course.code} code={course.code} course={course} disabled={false} />
             ))}
         </div>
         </>
