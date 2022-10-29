@@ -9,7 +9,6 @@ const User = require("./models/user")
 const LocalStrategy = require('passport-local').Strategy
 const session = require("express-session")
 const cors = require("cors");
-const mysql = require('mysql');
 
 // Setup middleware
 const app = express()
@@ -42,18 +41,6 @@ const db = mongoose.connection
 db.on('error', error => console.log(error))
 db.once('open', () => console.log('Connected to Mongoose'))
 
-// mysql connection
-const con = mysql.createConnection({
-	host: process.env.MYSQL_HOST,
-	user: process.env.MYSQL_USER,
-	password: process.env.MYSQL_PASSWORD,
-	database: process.env.MYSQL_DATABASE
-});
-con.connect(function(err) {
-	if (err) throw err;
-	console.log("Connected to MySQL!");
-});
-
 // Enable CORS
 if (process.env.NODE_ENV === 'production') {
 	const corsOptions ={
@@ -81,6 +68,3 @@ var port = process.env.PORT || 5000;
 app.listen(port, () => {
 	console.log("Server running on port " + port)
 })
-
-db.close();
-con.end();
