@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.1.1deb5ubuntu1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost:3306
--- Generation Time: Oct 24, 2022 at 12:01 AM
--- Server version: 8.0.30-0ubuntu0.22.04.1
--- PHP Version: 8.1.2
+-- Host: localhost
+-- Generation Time: Oct 29, 2022 at 05:25 PM
+-- Server version: 8.0.30
+-- PHP Version: 8.1.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -30,13 +30,22 @@ SET time_zone = "+00:00";
 CREATE TABLE `course` (
   `code` varchar(7) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `credit` int NOT NULL,
+  `credits` int NOT NULL,
   `time_slot` varchar(20) NOT NULL,
   `venue` varchar(50) NOT NULL,
   `instructor` varchar(50) NOT NULL,
   `link` varchar(100) NOT NULL,
   `capacity` int NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `course`
+--
+
+INSERT INTO `course` (`code`, `name`, `credits`, `time_slot`, `venue`, `instructor`, `link`, `capacity`) VALUES
+('CS101', 'Introduction to Programming', 6, 'A', 'Online', 'Rajshekar K', '', 180),
+('CS102', 'Introduction to Programming Lab', 3, 'A', 'Online', 'Rajshekar K', '', 180),
+('CS201', 'Data Structures and Algorithms', 6, 'A', 'Online', '', '', 180);
 
 -- --------------------------------------------------------
 
@@ -50,6 +59,13 @@ CREATE TABLE `time_slots` (
   `start_time` time NOT NULL,
   `end_time` time NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `time_slots`
+--
+
+INSERT INTO `time_slots` (`id`, `day`, `start_time`, `end_time`) VALUES
+('A', 'Monday', '08:30:00', '09:30:00');
 
 --
 -- Indexes for dumped tables
