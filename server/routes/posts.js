@@ -3,12 +3,41 @@ const passport = require('passport');
 const express = require('express');
 const postRouter = express.Router();
 const pick = require('../utlils/pick');
+const sqlDB = require('../sql');
+var crypto = require('crypto');
 
 postRouter.get('/', passport.authenticate('session'), async (req, res) => {
     if(req.user){
-        const filter = pick(req.query, ['author'])
-        const options = pick(req.query, ['sortBy', 'limit', 'skip', 'populate', 'page'])
-        res.send( await Post.paginate(filter, options ));   
+        var page = 1;
+        if (req.query.page) {
+            page = parseInt(req.query.page);
+        }
+        var totalPages = 0;
+        var totalPosts = 0;
+        var sql = "SELECT COUNT(*) AS total FROM posts";
+        sqlDB.query(sql, function (err, result, fields) {
+            if (err) {
+                console.log(err);
+                res.status(500).send(err);
+            }
+            else {
+                totalPosts = result[0].total;
+                totalPages = Math.ceil(totalPosts / 10);
+            }
+        });
+        sqlDB.query("SELECT * FROM posts ORDER BY `posts`.`created_at` DESC LIMIT 10 OFFSET ?", [(page-1)*10], (err, result) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send(err);
+            }
+            var response = {
+                "totalPages": totalPages,
+                "totalPosts": totalPosts,
+                "page": page,
+                "results": result
+            }
+            res.send(response);
+        });
     }
     else{
         res.sendStatus(401);
@@ -31,17 +60,22 @@ postRouter.get('/:id', passport.authenticate('session'), (req, res) => {
 });
 
 postRouter.post('/', passport.authenticate('session'), (req, res) => {
-    if(req.user){
-        const newPost = new Post(req.body);
-    newPost.authorId = req.user.id;
-    newPost.save((err, post) => {
-        if (err) {
-        res.send(err);
-        }
-        res.send(post);
-    });
-    }
-    else{
+    var temp = req.body;
+    temp.author_id = req.user.id;
+    temp.id = crypto.randomBytes(10).toString('hex');
+    console.log(req.user);
+    console.log(req);
+    if(req.user && req.body.author===req.user.username){
+        sqlDB.query("INSERT INTO posts SET ?", req.body, (err, result) => {
+            if (err) {
+                console.log(err);
+                res.status(500).send(err);
+            }
+            else {
+                res.status(201).send("Post added!");
+            }
+        });
+    }else{
         res.sendStatus(401);
     }
     
@@ -50,41 +84,43 @@ postRouter.post('/', passport.authenticate('session'), (req, res) => {
 postRouter.delete('/:id', passport.authenticate('session'), (req, res) => {
     if(req.user){
         if (req.user.role === 1 || req.user.role === 2) {
-            Post.findByIdAndRemove(req.params.id, (err, post) => {
+            sqlDB.query("DELETE FROM posts WHERE id = ?", [req.params.id], (err, result) => {
                 if (err) {
-                    res.send(err);
+                    console.log(err);
+                    res.status(500).send(err);
                 }
-                if(post){
-                    res.sendStatus(204);
-                }
-                else{
-                    res.sendStatus(404);
+                else {
+                    res.status(201).send("Post deleted!");
                 }
             });
         }
         else {
-            Post.findById(req.params.id, (err, post) => {
-                if (post) {
-                    console.log(post.authorId, req.user.id);
-                    if (post.authorId.equals(req.user.id)) {
-                        Post.findByIdAndDelete(req.params.id, (err, post) => {
+            sqlDB.query("SELECT * FROM posts WHERE id = ?", [req.params.id], (err, result) => {
+                if (err) {
+                    console.log(err);
+                    res.status(500).send(err);
+                }
+                else {
+                    // if not present
+                    if (result.length === 0) {
+                        res.status(404).send("Post not found!");
+                    }
+                    if (result[0].author_id === req.user.id) {
+                        sqlDB.query("DELETE FROM posts WHERE id = ?", [req.params.id], (err, result) => {
                             if (err) {
-                            res.send(err);
+                                console.log(err);
+                                res.status(500).send(err);
                             }
-                            res.sendStatus(204);
+                            else {
+                                res.status(201).send("Post deleted!");
+                            }
                         });
                     }
                     else {
                         res.sendStatus(403);
                     }
                 }
-                else if (err) {
-                    res.send(err);
-                }
-                else {
-                    res.sendStatus(404);
-                }
-            })
+            });
         }
     }
     else {
