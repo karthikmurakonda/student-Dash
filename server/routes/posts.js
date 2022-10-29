@@ -105,7 +105,7 @@ postRouter.delete('/:id', passport.authenticate('session'), (req, res) => {
                     if (result.length === 0) {
                         res.status(404).send("Post not found!");
                     }
-                    if (result[0].author_id === req.user.id) {
+                    else if (result[0].author_id === req.user.id) {
                         sqlDB.query("DELETE FROM posts WHERE id = ?", [req.params.id], (err, result) => {
                             if (err) {
                                 console.log(err);
