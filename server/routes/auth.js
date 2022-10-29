@@ -9,26 +9,19 @@ authRouter.post("/register", (req, res) => {
 	var username = req.body.username
 	var password = req.body.password
 	var rollNumber = req.body.rollNumber
-
-	// log only if env is not production
-	// if (process.env.NODE_ENV !== 'production') {
-	// 	console.log(`username: ${username}, password: ${password}, email: ${email}`);
-	// }
-
+	
 	User.register(new User({ fname: fname, lname: lname, email : email, username: username, rollNumber: rollNumber}), password, (err, user) => {
 		if (err) {
-			return res.status(401).send(err);
+			return res.status(401).send(String(err));
 		}
-
+		
 		passport.authenticate("local")(req, res, () => {
 			res.status(200).send(user.fname);
 		});
 	});
 });
 
-
-authRouter.post("/login", 
-	passport.authenticate("local", { failWithError: true }), 
+authRouter.post("/login", passport.authenticate("local", { failWithError: true }), 
 	(req, res) => {
 		userData = (({ fname, lname, email, username, role, _id }) => ({ fname, lname, email, username, role, _id }))(req.user)
 		res.status(200).send({user: userData})
@@ -50,14 +43,13 @@ authRouter.get("/login", passport.authenticate("session"), (req, res) => {
 
 
 authRouter.post("/logout", passport.authenticate("session"), function (req, res) {
-	// console.log(req.user);
 	req.logout();
 	res.sendStatus(202);
 });
 
 authRouter.post("/usernameexists", async (req, res) => {
-	    usernameExists = await User.exists({username: req.body.username})
-	    res.send({usernameExists}).status(200)
+	usernameExists = await User.exists({username: req.body.username})
+	res.send({usernameExists}).status(200)
 })
 
 module.exports = authRouter;
