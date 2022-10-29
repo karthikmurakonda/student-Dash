@@ -11,7 +11,7 @@ courseRouter.get('/', async (req, res) => {
 	if (req.query.search) {
 		search = req.query.search
 	}
-	var query = sqlDB.query("SELECT * FROM course WHERE code LIKE ? OR name LIKE ?", ["%"+search+"%", "%"+search+"%"], function (err, result, fields) {
+	sqlDB.query("SELECT * FROM course WHERE code LIKE ? OR name LIKE ?", ["%"+search+"%", "%"+search+"%"], function (err, result, fields) {
 		if (err) {
 			console.log(err);
 			res.send(err);
@@ -25,7 +25,6 @@ courseRouter.get('/', async (req, res) => {
 			}
 		}
 	});
-	console.log(query);
 });
 
 // Create a new course

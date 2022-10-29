@@ -2,7 +2,7 @@ import { createContext, useContext, useState } from 'react'
 import axios from 'axios'
 
 export const server = axios.create({
-    baseURL: process.env.REACT_APP_SERVER_URL + '/courseplanner',
+    baseURL: process.env.REACT_APP_SERVER_URL,
     withCredentials: true
 });
 
@@ -51,6 +51,7 @@ function useProvideCP() {
     // };
 
     const [courses, setCourses] = useState()
+	const [slots, setSlots] = useState()
     const [schedules, setSchedules] = useState([])
     const [calendars, setCalendars] = useState([])
     const [clashes, setClashes] = useState([])
@@ -91,7 +92,7 @@ function useProvideCP() {
     }
 
 
-    return { courses, setCourses, schedules, setSchedules, calendars, setCalendars, clashes, getClashes, selectedCourses, setSelectedCourses, deselectCourse, totalCredits, setTotalCredits }
+    return { courses, setCourses, slots, setSlots, schedules, setSchedules, calendars, setCalendars, clashes, getClashes, selectedCourses, setSelectedCourses, deselectCourse, totalCredits, setTotalCredits }
 }
 
 

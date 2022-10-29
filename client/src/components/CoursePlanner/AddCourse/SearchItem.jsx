@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef} from 'react';
-import { useCP } from '../../../hooks/CPContext';
+import { server, useCP } from '../../../hooks/CPContext';
 
 // Component: CourseList
 // Description:
@@ -28,9 +28,17 @@ export default function SearchItem({ course, code, disabled }) {
 
     function addCourse() {
         let selectedCourses = CP.selectedCourses
-        selectedCourses.push(course)
-        CP.setSelectedCourses([...selectedCourses])
-        setSelected(true)
+		setSelected(true)
+		server.get('/slot/'+course.time_slot)
+			.then(res => {
+				course.time_slot = res.data
+				selectedCourses.push(course)
+				CP.setSelectedCourses([...selectedCourses])
+			})
+			.catch(err => {
+				console.log(err)
+				setSelected(false)
+			})
     }
 
     function removeCourse() {

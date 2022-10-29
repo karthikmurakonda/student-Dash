@@ -15,7 +15,7 @@ export default function Courseplanner() {
     const [showCourseModal, setShowCourseModal] = useState(false)
 
     useEffect(() => {
-        server.get("/", { params: { page: 1 } })
+        server.get("/course")
             .then((res) => {
                 CP.setCourses(res.data)
             })

@@ -9,31 +9,16 @@ const randomColor = require('randomcolor');
 // 		and allows the user to select them.
 // 		The list is filtered by the user's search term.
 
-function CourseItem({ course, code, disabled }) {
+function CourseItem({ course, name, code, disabled }) {
     const inputRef = useRef()
     const CP = useCP()
     const [showInfo, setShowInfo] = useState(false)
-    const [courseInfo, setCourseInfo] = useState({})
-
-    useEffect(() => {
-        server.get('/'+code)
-            .then((res) => {
-                setCourseInfo(res.data)
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }, [])
 
     function getNearestDate(day, time) {
         const today = new Date();
         const dayOfWeek = today.getDay();
         const diff = day - dayOfWeek;
-        if (diff >= 0) {
-            return new Date(today.getFullYear(), today.getMonth(), today.getDate() + diff + 7, (time-(time%100))/100, time%100);
-        } else if (diff < 0) {
-            return new Date(today.getFullYear(), today.getMonth(), today.getDate() + diff + 7, (time-(time%100))/100, time%100);
-        }
+		return new Date(today.getFullYear(), today.getMonth(), today.getDate() + diff + 7, time.split(":")[0], time.split(":")[1]);
     }
 
     function addCourse() {
@@ -41,7 +26,7 @@ function CourseItem({ course, code, disabled }) {
         var color = randomColor({ luminosity: 'dark', seed: code })
         const newCalendar = {
             code: String(code),
-            name: course,
+            name: name,
             bgColor: color,
             borderColor: color
         }
@@ -49,11 +34,11 @@ function CourseItem({ course, code, disabled }) {
         calendars.push(newCalendar)
         CP.setCalendars([...calendars])
         // Add each class to schedule
-        courseInfo.course_timetable.map(myClass => {
+        course.time_slot.map(myClass => {
             const newClass = {
                 code: String(CP.schedules.length+1),
                 calendarcode: String(code),
-                title: course,
+                title: name,
                 category: 'time',
                 dueDateClass: '',
                 start: getNearestDate(myClass.day, myClass.start_time).toISOString(),
@@ -69,7 +54,7 @@ function CourseItem({ course, code, disabled }) {
             let schedules = CP.schedules
             schedules.push(newClass)
             CP.setSchedules([...schedules])
-            CP.setTotalCredits(CP.totalCredits+courseInfo.course_credit)
+            CP.setTotalCredits(CP.totalCredits+course.course_credit)
         })
     }
 
@@ -84,7 +69,7 @@ function CourseItem({ course, code, disabled }) {
         schedules = schedules.filter(schedule => schedule.calendarcode !== code);
         // set new schedules and get clashes
         CP.setSchedules(schedules);
-        CP.setTotalCredits(CP.totalCredits-courseInfo.course_credit)
+        CP.setTotalCredits(CP.totalCredits-course.course_credit)
     }
 
     function removeFromList() {
@@ -99,7 +84,7 @@ function CourseItem({ course, code, disabled }) {
         // set new schedules and get clashes
         CP.setSchedules(schedules);
         if(currCal.length > 0) {
-            CP.setTotalCredits(CP.totalCredits-courseInfo.course_credit)
+            CP.setTotalCredits(CP.totalCredits-course.course_credit)
         }
     }
 
@@ -122,7 +107,7 @@ function CourseItem({ course, code, disabled }) {
         < >
         <label className="list-group-item" >
             <input ref={inputRef} onChange={handleSelect} className="form-check-input me-2" type="checkbox" value="" disabled={disabled} />
-            {course}
+            {name}
             <a href="#" onClick={() => setShowInfo(!showInfo)} className="link-primary mx-1"><i className="bi bi-info-circle"></i></a>
             <CloseButton className="float-end" onClick={handleRemove} />
         </label>
@@ -132,15 +117,15 @@ function CourseItem({ course, code, disabled }) {
                     <tbody>
                         <tr>
                             <td>Credits:</td>
-                            <td>{courseInfo.credits}</td>
+                            <td>{course.credits}</td>
                         </tr>
                         <tr>
                             <td>Mode:</td>
-                            <td>{courseInfo.venue}</td>
+                            <td>{course.venue}</td>
                         </tr>
                         <tr>
                             <td>Instructor:</td>
-                            <td>{courseInfo.instructor}</td>
+                            <td>{course.instructor}</td>
                         </tr>
                     </tbody>
                 </table>
