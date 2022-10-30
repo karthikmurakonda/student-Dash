@@ -9,6 +9,7 @@ const User = require("./models/user")
 const LocalStrategy = require('passport-local').Strategy
 const session = require("express-session")
 const cors = require("cors");
+const sqlDB = require("./sql")
 
 // Setup middleware
 const app = express()

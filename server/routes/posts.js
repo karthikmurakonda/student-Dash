@@ -4,7 +4,6 @@ const express = require('express');
 const postRouter = express.Router();
 const pick = require('../utlils/pick');
 const sqlDB = require('../sql');
-var crypto = require('crypto');
 
 postRouter.get('/', passport.authenticate('session'), async (req, res) => {
     if(req.user){
@@ -62,7 +61,6 @@ postRouter.get('/:id', passport.authenticate('session'), (req, res) => {
 postRouter.post('/', passport.authenticate('session'), (req, res) => {
     var temp = req.body;
     temp.author_id = req.user.id;
-    temp.id = crypto.randomBytes(10).toString('hex');
     console.log(req.user);
     console.log(req);
     if(req.user && req.body.author===req.user.username){
