@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Oct 30, 2022 at 05:42 PM
+-- Generation Time: Oct 30, 2022 at 10:38 PM
 -- Server version: 8.0.30
 -- PHP Version: 8.1.11
 
@@ -42,10 +42,14 @@ CREATE TABLE `courses` (
 --
 
 INSERT INTO `courses` (`code`, `name`, `credits`, `time_slot`, `venue`, `instructor`, `capacity`) VALUES
-('CS101', 'Introduction to Programming', 6, 'A', 'Online', 'Rajshekar K', 180),
-('CS102', 'Introduction to Programming Lab', 3, '2A', 'Online', 'Rajshekar K', 180),
-('CS201', 'Data Structures & Algorithms', 3, 'B', 'Online', '', 180),
-('TE101', 'Test', 1, 'C', '23', 'Om', 25);
+('CS303', 'Data Bases and Information Systems', 6, '5', '117', 'Prof. Siba Narayan Swain', NULL),
+('CS311', 'Computer Architecture Lab', 3, 'L2', NULL, 'Prof. Rajshekar K', NULL),
+('CS313', 'Databases and information systems laboratory', 3, 'L3', '117', 'Prof. Siba Narayan Swain', 100),
+('CS601', 'Software Development for Scientific Computing', 6, '1', '117', 'Prof. Nikhil Hegde', NULL),
+('EE409', 'Speech Processing', 6, '9', 'Online', 'Prof. Prasanna', NULL),
+('HS301', 'Philosophy', 6, '7', '117', 'Prof. Jolly Thomos', 75),
+('HS304', 'Intellectual Property Management', 6, '7', NULL, 'Prof. Hirwani', NULL),
+('HS403', 'Happiness and Well-being', 6, '7', NULL, 'Prof. BL Tembe', NULL);
 
 -- --------------------------------------------------------
 
@@ -86,15 +90,23 @@ CREATE TABLE `time_slots` (
 --
 
 INSERT INTO `time_slots` (`id`, `day`, `start_time`, `end_time`) VALUES
-('2A', 4, '14:00:00', '17:00:00'),
-('A', 1, '08:30:00', '09:30:00'),
-('A', 2, '10:30:00', '11:30:00'),
-('A', 5, '11:30:00', '12:30:00'),
-('B', 1, '08:30:00', '09:30:00'),
-('B', 3, '14:00:00', '15:00:00'),
-('B', 5, '16:00:00', '17:00:00'),
-('C', 1, '12:00:00', '14:00:00'),
-('C', 4, '12:00:00', '14:00:00');
+('1', 1, '08:30:00', '09:30:00'),
+('1', 2, '09:30:00', '10:30:00'),
+('1', 4, '10:30:00', '11:30:00'),
+('10', 1, '15:00:00', '16:00:00'),
+('10', 3, '15:00:00', '16:00:00'),
+('10', 5, '16:00:00', '17:00:00'),
+('5', 2, '10:30:00', '11:30:00'),
+('5', 3, '08:30:00', '09:30:00'),
+('5', 4, '09:30:00', '10:30:00'),
+('7', 1, '14:00:00', '15:00:00'),
+('7', 2, '17:00:00', '18:00:00'),
+('7', 4, '19:00:00', '20:00:00'),
+('9', 1, '18:00:00', '19:00:00'),
+('9', 2, '19:00:00', '20:00:00'),
+('9', 4, '14:00:00', '15:00:00'),
+('L2', 3, '10:30:00', '13:30:00'),
+('L3', 1, '09:30:00', '12:30:00');
 
 -- --------------------------------------------------------
 
