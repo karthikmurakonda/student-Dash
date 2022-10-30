@@ -22,20 +22,22 @@ postRouter.get('/', passport.authenticate('session'), async (req, res) => {
             else {
                 totalPosts = result[0].total;
                 totalPages = Math.ceil(totalPosts / 10);
+				sqlDB.query("SELECT * FROM posts ORDER BY `posts`.`created_at` DESC LIMIT 10 OFFSET ?", [(page-1)*10], (err, result) => {
+					if (err) {
+						console.log(err);
+						res.status(500).send(err);
+					}
+					else {
+						var response = {
+							"totalPages": totalPages,
+							"totalPosts": totalPosts,
+							"page": page,
+							"results": result
+						}
+						res.send(response);
+					}
+				});
             }
-        });
-        sqlDB.query("SELECT * FROM posts ORDER BY `posts`.`created_at` DESC LIMIT 10 OFFSET ?", [(page-1)*10], (err, result) => {
-            if (err) {
-                console.log(err);
-                res.status(500).send(err);
-            }
-            var response = {
-                "totalPages": totalPages,
-                "totalPosts": totalPosts,
-                "page": page,
-                "results": result
-            }
-            res.send(response);
         });
     }
     else{
@@ -48,9 +50,11 @@ postRouter.get('/:id', passport.authenticate('session'), (req, res) => {
     if(req.user){
         Post.findById(req.params.id, (err, post) => {
             if (err) {
-            res.send(err);
+            	res.send(err);
             }
-            res.json(post);
+			else {
+				res.json(post);
+			}
         });
     }
     else{

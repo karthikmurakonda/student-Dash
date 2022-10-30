@@ -7,6 +7,7 @@ import Courseplanner from "../CoursePlanner/Courseplanner";
 import UserRoute from "./UserRoute";
 import { CPProvider } from "../../hooks/CPContext";
 import CourseAdd from "../CourseAdd/CourseAdd"
+import SlotAdd from "../SlotAdd/SlotAdd"
 import AdminRoute from "./AdminRoute"
 import Posts from "../Posts/Posts";
 
@@ -32,6 +33,9 @@ export default function App() {
 				</UserRoute>
 				<AdminRoute path="/admin/addcourse">
 					<CourseAdd />
+				</AdminRoute>
+				<AdminRoute path="/admin/addslot">
+					<SlotAdd />
 				</AdminRoute>
 				<Route path="/">
 					<Poster />

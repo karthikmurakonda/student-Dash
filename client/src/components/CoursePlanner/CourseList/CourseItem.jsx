@@ -120,7 +120,7 @@ function CourseItem({ course, name, code, disabled }) {
                             <td>{course.credits}</td>
                         </tr>
                         <tr>
-                            <td>Mode:</td>
+                            <td>Venue:</td>
                             <td>{course.venue}</td>
                         </tr>
                         <tr>

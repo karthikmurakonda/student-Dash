@@ -1,42 +1,62 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Alert, Form, Button, Container, Row, Col, FloatingLabel, Modal } from 'react-bootstrap'
 import * as yup from 'yup'
 import { Formik } from 'formik';
-import ClassList from './ClassList/ClassList';
-import AddClassForm from './ClassList/AddClassForm';
+import ClassList from '../SlotAdd/ClassList/ClassList';
+import AddClassForm from '../SlotAdd/ClassList/AddClassForm';
 import axios from 'axios';
 
 export default function CourseManage() {
     const [showModal, setShowModal] = useState(false)
-    const [classes, setClasses] = useState([])
+    const [slots, setSlots] = useState([])
     const [success, setSuccess] = useState(false)
     const [failure, setFailure] = useState(false)
     const server = axios.create({
-        baseURL: process.env.REACT_APP_SERVER_URL + '/courseplanner',
+        baseURL: process.env.REACT_APP_SERVER_URL + '/',
         withCredentials: true
     });
+
+	useEffect(() => {
+		server.get("slot/ids")
+			.then((res) => {
+				setSlots(res.data)
+				console.log(res.data);
+			})
+			.catch((err) => {
+				setFailure(true)
+				console.log(err);
+			})
+	}, [])
 
 	let schema = yup.object().shape({
 		name: yup.string().required('Required!'),
 		code: yup.string().required('Required!'),
         credits: yup.number().positive('Must be a Positive Number!').required('Required!'),
-        instructor: yup.string().required('Required!')
+        instructor: yup.string().required('Required!'),
+		slot: yup.string().required('Required!'),
+		capacity: yup.number().positive('Must be a Positive Number!')
 	})
 
 	function login(values, {resetForm}) {
         const newCourse = {
-            course_name: values.name,
-            course_code: values.code,
-            course_credit: values.credits,
-            course_timetable: classes,
-            course_instructor: values.instructor
+            name: values.name,
+            code: values.code,
+            credits: values.credits,
+            instructor: values.instructor,
+            time_slot: values.slot,
         }
 
-        server.post("/", newCourse)
+		if (values.capacity) {
+			newCourse.capacity = values.capacity
+		}
+		if (values.venue) {
+			newCourse.venue = values.venue
+		}
+
+        server.post("course/", newCourse)
             .then((res) => {
                 setSuccess(true)
                 resetForm()
-                setClasses([])
             })
             .catch((err) => {
                 setFailure(true)
@@ -51,7 +71,7 @@ export default function CourseManage() {
                     <Alert variant="danger mx-5" show={failure} onClose={() => setFailure(false)} dismissible>Something went wrong!</Alert>
                     <Alert variant="success mx-5" show={success} onClose={() => setSuccess(false)} dismissible>Course added successfully!</Alert>
 					<h1 className="mx-5 my-4">Add a New Course</h1>
-					<Formik validationSchema={schema} onSubmit={login} initialValues={{name: '', code: '', credits: '', instructor: ''}}>
+					<Formik validationSchema={schema} onSubmit={login} initialValues={{name: '', code: '', credits: '', instructor: '', slot: ''}}>
 						{({handleSubmit, handleChange, handleBlur, values, touched, isValid, errors, dirty}) => (
 							<Form className="mx-5 my-4" noValidate onSubmit={handleSubmit}>
 
@@ -83,7 +103,31 @@ export default function CourseManage() {
                                     </FloatingLabel>
                                 </Form.Group>
 
-                                <ClassList handleAdd={()=>setShowModal(true)} classes={classes} setClasses={setClasses} />
+								<Form.Group className="mb-3" controlId="formVenue">
+                                    <FloatingLabel label="Course Venue">
+                                        <Form.Control type="text" name='venue' value={values.venue} onChange={handleChange} onBlur={handleBlur} isInvalid={touched.venue && errors.venue} />
+                                        <Form.Control.Feedback type="invalid"> {errors.venue} </Form.Control.Feedback>
+                                    </FloatingLabel>
+                                </Form.Group>
+
+								<Form.Group className="mb-3" controlId="formCapacity">
+									<FloatingLabel label="Course Capacity">
+										<Form.Control type="number" name='capacity' value={values.capacity} onChange={handleChange} onBlur={handleBlur} isInvalid={touched.capacity && errors.capacity} />
+										<Form.Control.Feedback type="invalid"> {errors.capacity} </Form.Control.Feedback>
+									</FloatingLabel>
+								</Form.Group>
+
+								<Form.Group className="mb-3" controlId="formSlot">
+									<FloatingLabel label="Slot">
+										<Form.Select name="slot" value={values.slot} onChange={handleChange} onBlur={handleBlur} isInvalid={touched.slot && errors.slot}>
+											<option value=""></option>
+											{slots.map((slot) => (
+												<option value={slot}>{slot}</option>
+											))}
+										</Form.Select>
+										<Form.Control.Feedback type="invalid"> {errors.slot} </Form.Control.Feedback>
+									</FloatingLabel>
+								</Form.Group>
 
 								<Button variant="primary" type="submit" disabled={!(isValid && dirty)}>
 									Add New Course
@@ -94,14 +138,6 @@ export default function CourseManage() {
 				</Col>
 			</Row>
 		</Container>
-        <Modal size='lg' show={showModal} centered onHide={()=>setShowModal(false)} >
-            <Modal.Header closeButton>
-                <Modal.Title>Add a Class</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-                <AddClassForm classes={classes} setClasses={setClasses} setShowModal={setShowModal} />
-            </Modal.Body>
-        </Modal>
         </>
 	)
 }
