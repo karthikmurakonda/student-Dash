@@ -25,7 +25,13 @@ export default function Post({post, update, setUpdate}) {
             return (hours%12)+":"+mins+" pm"
         }
         else {
-            return hours+":"+mins+" am"
+            if (mins === 0) {
+                return (hours)+":00 am"
+            }
+            else if (mins<10) {
+                return (hours)+":0"+mins+" am" 
+            }
+            return (hours)+":"+mins+" am"
         }
     }
 
