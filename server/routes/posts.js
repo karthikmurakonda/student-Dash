@@ -1,8 +1,6 @@
-const Post = require('../models/posts');
 const passport = require('passport');
 const express = require('express');
 const postRouter = express.Router();
-const pick = require('../utlils/pick');
 const sqlDB = require('../utlils/sql');
 
 postRouter.get('/', passport.authenticate('session'), async (req, res) => {

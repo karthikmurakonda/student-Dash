@@ -1,6 +1,5 @@
 const authRouter = require('express').Router();
 const passport = require('passport');
-const User = require('../models/user');
 const sqlDB = require('../utlils/sql');
 const crypto = require('crypto');
 

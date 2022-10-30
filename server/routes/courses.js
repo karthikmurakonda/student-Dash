@@ -1,8 +1,6 @@
-const Courses = require('../models/courses');
 const express = require('express');
 const courseRouter = express.Router();
 const passport = require('passport');
-const pick = require('../utlils/pick');
 const sqlDB = require('../utlils/sql');
 
 // Get courses info

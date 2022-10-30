@@ -3,14 +3,10 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const express = require('express')
-const mongoose = require('mongoose')
 const passport = require('passport')
-const User = require("./models/user")
 const LocalStrategy = require('passport-local').Strategy
 const session = require("express-session")
 const cors = require("cors");
-const sqlDB = require("./utlils/sql")
-const crypto = require('crypto')
 const {verifyUser, userSerializer, userDeserializer} = require("./utlils/verify")
 
 // Setup middleware
