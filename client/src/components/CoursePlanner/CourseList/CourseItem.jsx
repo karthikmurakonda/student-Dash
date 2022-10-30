@@ -127,6 +127,10 @@ function CourseItem({ course, name, code, disabled }) {
                             <td>Instructor:</td>
                             <td>{course.instructor}</td>
                         </tr>
+						<tr>
+                            <td>Capacity:</td>
+                            <td>{course.capacity}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
