@@ -1,7 +1,7 @@
 const express = require('express');
 const passport = require('passport');
 const slotRouter = express.Router();
-const sqlDB = require('../sql');
+const sqlDB = require('../utlils/sql');
 
 // Get slot ids
 slotRouter.get('/ids', (req, res) => {

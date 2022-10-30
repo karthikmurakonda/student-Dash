@@ -3,7 +3,7 @@ const express = require('express');
 const courseRouter = express.Router();
 const passport = require('passport');
 const pick = require('../utlils/pick');
-const sqlDB = require('../sql');
+const sqlDB = require('../utlils/sql');
 
 // Get courses info
 courseRouter.get('/', async (req, res) => {
@@ -11,21 +11,21 @@ courseRouter.get('/', async (req, res) => {
 	if (req.query.search) {
 		search = req.query.search
 	}
-	sqlDB.query("SELECT * FROM course WHERE code LIKE ? OR name LIKE ?", ["%"+search+"%", "%"+search+"%"], function (err, result, fields) {
+	sqlDB.query("SELECT * FROM courses WHERE code LIKE ? OR name LIKE ?", ["%"+search+"%", "%"+search+"%"], function (err, result, fields) {
 		if (err) {
 			console.log(err);
 			res.send(err);
 		}
 		else {
 			if (req.query.page) {
-				res.send(result.slice((req.query.page - 1) * 10, req.query.page * 10));
+				res.send(result.slice((req.query.page - 1) * 10, req.query.page * 10))
 			}
 			else {
-				res.send(result);
+				res.send(result)
 			}
 		}
-	});
-});
+	})
+})
 
 // Create a new course
 courseRouter.post('/', passport.authenticate("session"), (req, res) => {
@@ -51,7 +51,7 @@ courseRouter.post('/', passport.authenticate("session"), (req, res) => {
 
 // Get a single course
 courseRouter.get('/:code', (req, res) => {
-    sqlDB.query("SELECT * FROM course WHERE code = ?", [req.params.code], (err, result) => {
+    sqlDB.query("SELECT * FROM courses WHERE code = ?", [req.params.code], (err, result) => {
 		if (err) {
 			console.log(err);
 			res.status(500).send(err);
@@ -64,7 +64,7 @@ courseRouter.get('/:code', (req, res) => {
 courseRouter.delete('/:code', passport.authenticate("session"), (req, res) => {
 	if(req.user){
 		if (req.user.role === 1 || req.user.role === 2) {
-			sqlDB.query("DELETE FROM course WHERE code = ?", [req.params.code], (err, result) => {
+			sqlDB.query("DELETE FROM courses WHERE code = ?", [req.params.code], (err, result) => {
 				if (err) {
 					console.log(err);
 					res.status(500).send(err);

@@ -3,7 +3,7 @@ const passport = require('passport');
 const express = require('express');
 const postRouter = express.Router();
 const pick = require('../utlils/pick');
-const sqlDB = require('../sql');
+const sqlDB = require('../utlils/sql');
 
 postRouter.get('/', passport.authenticate('session'), async (req, res) => {
     if(req.user){
@@ -64,9 +64,6 @@ postRouter.get('/:id', passport.authenticate('session'), (req, res) => {
 
 postRouter.post('/', passport.authenticate('session'), (req, res) => {
     var temp = req.body;
-    temp.author_id = req.user.id;
-    console.log(req.user);
-    console.log(req);
     if(req.user && req.body.author===req.user.username){
         sqlDB.query("INSERT INTO posts SET ?", req.body, (err, result) => {
             if (err) {
@@ -107,7 +104,7 @@ postRouter.delete('/:id', passport.authenticate('session'), (req, res) => {
                     if (result.length === 0) {
                         res.status(404).send("Post not found!");
                     }
-                    else if (result[0].author_id === req.user.id) {
+                    else if (result[0].author === req.user.username) {
                         sqlDB.query("DELETE FROM posts WHERE id = ?", [req.params.id], (err, result) => {
                             if (err) {
                                 console.log(err);

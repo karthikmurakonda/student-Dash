@@ -9,7 +9,9 @@ const User = require("./models/user")
 const LocalStrategy = require('passport-local').Strategy
 const session = require("express-session")
 const cors = require("cors");
-const sqlDB = require("./sql")
+const sqlDB = require("./utlils/sql")
+const crypto = require('crypto')
+const {verifyUser, userSerializer, userDeserializer} = require("./utlils/verify")
 
 // Setup middleware
 const app = express()
@@ -32,15 +34,17 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // Setup passport
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.use(new LocalStrategy(verifyUser))
+
+passport.serializeUser(userSerializer)
+
+passport.deserializeUser(userDeserializer)
 
 // Setup mongoose
-mongoose.connect(process.env.DATABASE_URL)
-const mongoDB = mongoose.connection
-mongoDB.on('error', error => console.log(error))
-mongoDB.once('open', () => console.log('Connected to Mongoose'))
+// mongoose.connect(process.env.DATABASE_URL)
+// const mongoDB = mongoose.connection
+// mongoDB.on('error', error => console.log(error))
+// mongoDB.once('open', () => console.log('Connected to Mongoose'))
 
 // Enable CORS
 if (process.env.NODE_ENV === 'production') {

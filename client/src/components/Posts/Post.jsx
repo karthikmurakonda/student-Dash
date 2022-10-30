@@ -76,7 +76,7 @@ export default function Post({post, update, setUpdate}) {
             <Card.Body>
                 {post.content}
             </Card.Body>
-            {(auth.user.role === 1 || auth.user.role === 2 || auth.user._id === post.author_id)? (
+            {(auth.user.role === 1 || auth.user.role === 2 || auth.user.username === post.author)? (
                 <ListGroup><div className="text-end px-3 py-1"><Button onClick={deletePost} variant="outline-danger"><i className="bi bi-trash-fill"></i></Button></div></ListGroup>
             ):(
                 <></>
