@@ -102,10 +102,10 @@ See [SETUP.md](./SETUP.md) to setup the project.
 We have hosted the project on [heroku](https://studentdash.herokuapp.com/).
 
 ## Github
-Check our [github](https://github.com/karthikmurakonda/student-Dash) page.
+Check our [github](https://github.com/karthikmurakonda/student-Dash/tree/SQL) page.
 
 ## Contributors
 - [Om Patil](https://www.github.com/modernoctave)
-- [Karthik mv ](https://www.github.com/karthikmurakonda)
+- [Karthik M V ](https://www.github.com/karthikmurakonda)
 
 Pull requests are welcome!
