@@ -7,9 +7,14 @@ const sqlDB = mysql.createConnection({
 	password: process.env.MYSQL_PASSWORD,
 	database: process.env.MYSQL_DATABASE
 });
+
 sqlDB.connect(function(err) {
-	if (err) throw err;
-	console.log("Connected to MySQL!");
+	if (err) {
+		throw new Error("Could not connect to MySQL!\n"+err.message)
+	}
+	else {
+		console.log("Connected to MySQL!");
+	}
 });
 
 module.exports = sqlDB;
