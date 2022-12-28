@@ -46,15 +46,15 @@ function CourseItem({ course, name, code, disabled }) {
                 bgColor: color,
                 borderColor: color,
                 color: '#ffffff',
-                rawStart: parseInt(myClass.start_time),
-                rawEnd: parseInt(myClass.end_time),
+                rawStart: parseInt(myClass.start_time.split(":")[0]+myClass.start_time.split(":")[1]),
+                rawEnd: parseInt(myClass.end_time.split(":")[0]+myClass.end_time.split(":")[1]),
                 rawDay: parseInt(myClass.day),
                 rawcode: code
             }
             let schedules = CP.schedules
             schedules.push(newClass)
             CP.setSchedules([...schedules])
-            CP.setTotalCredits(CP.totalCredits+course.course_credit)
+            CP.setTotalCredits(CP.totalCredits+course.credits)
         })
     }
 
@@ -69,7 +69,7 @@ function CourseItem({ course, name, code, disabled }) {
         schedules = schedules.filter(schedule => schedule.calendarcode !== code);
         // set new schedules and get clashes
         CP.setSchedules(schedules);
-        CP.setTotalCredits(CP.totalCredits-course.course_credit)
+        CP.setTotalCredits(CP.totalCredits-course.credits)
     }
 
     function removeFromList() {
@@ -84,7 +84,7 @@ function CourseItem({ course, name, code, disabled }) {
         // set new schedules and get clashes
         CP.setSchedules(schedules);
         if(currCal.length > 0) {
-            CP.setTotalCredits(CP.totalCredits-course.course_credit)
+            CP.setTotalCredits(CP.totalCredits-course.credits)
         }
     }
 
