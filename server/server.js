@@ -3,12 +3,11 @@ if (process.env.NODE_ENV !== 'production') {
 }
 
 const express = require('express')
-const mongoose = require('mongoose')
 const passport = require('passport')
-const User = require("./models/user")
 const LocalStrategy = require('passport-local').Strategy
 const session = require("express-session")
 const cors = require("cors");
+const {verifyUser, userSerializer, userDeserializer} = require("./utlils/verify")
 
 // Setup middleware
 const app = express()
@@ -31,15 +30,17 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 // Setup passport
-passport.use(new LocalStrategy(User.authenticate()));
-passport.serializeUser(User.serializeUser());
-passport.deserializeUser(User.deserializeUser());
+passport.use(new LocalStrategy(verifyUser))
+
+passport.serializeUser(userSerializer)
+
+passport.deserializeUser(userDeserializer)
 
 // Setup mongoose
-mongoose.connect(process.env.DATABASE_URL)
-const db = mongoose.connection
-db.on('error', error => console.log(error))
-db.once('open', () => console.log('Connected to Mongoose'))
+// mongoose.connect(process.env.DATABASE_URL)
+// const mongoDB = mongoose.connection
+// mongoDB.on('error', error => console.log(error))
+// mongoDB.once('open', () => console.log('Connected to Mongoose'))
 
 // Enable CORS
 if (process.env.NODE_ENV === 'production') {
@@ -53,7 +54,7 @@ if (process.env.NODE_ENV === 'production') {
 }
 else {
 	const corsOptions ={
-	   origin:'http://localhost:3000',
+	   origin:['http://localhost:3000'],
 	   credentials: true,
 	   optionSuccessStatus:200
 	}
@@ -68,3 +69,6 @@ var port = process.env.PORT || 5000;
 app.listen(port, () => {
 	console.log("Server running on port " + port)
 })
+
+// mongoDB.close();
+// sqlDB.end();

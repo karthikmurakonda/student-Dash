@@ -17,6 +17,7 @@ export default function AdminNavs() {
                 < >
                 <NavDropdown title="Manage Courses" onSelect={handleSelect} >
                     <NavDropdown.Item eventKey="/admin/addcourse" >Add Courses</NavDropdown.Item>
+                    <NavDropdown.Item eventKey="/admin/addslot" >Add Time Slot</NavDropdown.Item>
                 </NavDropdown>
                 </>
             )

@@ -15,9 +15,9 @@ export default function Courseplanner() {
     const [showCourseModal, setShowCourseModal] = useState(false)
 
     useEffect(() => {
-        server.get("/", { params: { page: 1 } })
+        server.get("/course")
             .then((res) => {
-                CP.setCourses(res.data.results)
+                CP.setCourses(res.data)
             })
             .catch((err) => {
                 console.log(err);
@@ -48,9 +48,6 @@ export default function Courseplanner() {
         return (
             < >
             <Container className='mt-3' fluid>
-                <Row className='px-2'>
-                    <Clashes />
-                </Row>
                 <Row>
                     <Col lg='8'>
                         <Timetable />
@@ -71,7 +68,7 @@ export default function Courseplanner() {
                             </Card>
                         </Collapse>
                         <CourseList handleAdd={()=>setShowCourseModal(true)} />
-                        
+                    	<Clashes />
                     </Col>
                 </Row>
             </Container>

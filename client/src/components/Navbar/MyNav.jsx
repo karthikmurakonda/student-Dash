@@ -9,14 +9,17 @@ export default function MyNav() {
     const location = useLocation()
 
     return (
-        <Navbar bg="dark" variant="dark" fixed="top">
+        <Navbar bg="dark" variant="dark" fixed="top" expand='md'>
             <Container fluid>
                 <Navbar.Brand className="mx-3" href="/">Student Dash</Navbar.Brand>
-                <Nav activeKey={location.pathname} className="me-auto">
-                    <UserNavs />
-                    <AdminNavs />
-                </Nav>
-                <LoginUtil className="justify-content-end"/>
+				<Navbar.Toggle />
+				<Navbar.Collapse>
+					<Nav activeKey={location.pathname} className="me-auto">
+						<UserNavs />
+						<AdminNavs />
+					</Nav>
+					<LoginUtil className="justify-content-end"/>
+				</Navbar.Collapse>
             </Container>
         </Navbar>
     )

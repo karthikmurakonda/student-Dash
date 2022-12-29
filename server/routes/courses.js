@@ -1,85 +1,83 @@
-const Courses = require('../models/courses');
 const express = require('express');
 const courseRouter = express.Router();
 const passport = require('passport');
-const pick = require('../utlils/pick');
+const sqlDB = require('../utlils/sql');
 
-
+// Get courses info
 courseRouter.get('/', async (req, res) => {
-    // use pagination to paginate the results
-    var filter = {}
-    if (req.query.course_name) {
-        var nameRegex = new RegExp(req.query.course_name);
-        filter = {$or: [{'course_name': {$regex: nameRegex, $options: 'i'}}, {'course_code': {$regex: nameRegex, $options: 'i'}}]}
-    }
-    else {
-        filter = pick(req.query, ['course_name', 'course_code']);
-    }
-    const options = pick(req.query, ['sortBy', 'limit', 'page']);
-    if (!req.query.sortBy) {
-        options.sortBy = 'course_name';
-    }
-    res.send( await Courses.paginate(filter, options, ['course_name', 'course_code']));
-});
+	var search = ""
+	if (req.query.search) {
+		search = req.query.search
+	}
+	sqlDB.query("SELECT * FROM courses WHERE code LIKE ? OR name LIKE ?", ["%"+search+"%", "%"+search+"%"], function (err, result, fields) {
+		if (err) {
+			console.log(err);
+			res.send(err);
+		}
+		else {
+			if (req.query.page) {
+				res.send(result.slice((req.query.page - 1) * 5, req.query.page * 5))
+			}
+			else {
+				res.send(result)
+			}
+		}
+	})
+})
+
 // Create a new course
-courseRouter.post('/',passport.authenticate("session") ,(req, res) => {
-    if(req.user){
-    // check if user has role 2 or 3 (admin or teacher)
-        if (req.user.role === 1 || req.user.role === 2) {
-            Courses.create(req.body, (err, course) => {
-                console.log(req.body);
-                if (err) {
-                    console.log(err);
-                    res.status(500).send(err);
-                }
-                res.send(course);
-            });
-        } else {
-            res.status(401).send("You are not authorized to create a course");
-        }
-    }
-    else{
-        res.sendStatus(401);
-    }
+courseRouter.post('/', passport.authenticate("session"), (req, res) => {
+	if(req.user){
+		if (req.user.role === 1 || req.user.role === 2) {	// check if user has role 1 or 2 (admin or teacher)
+			sqlDB.query("INSERT INTO courses SET ?", req.body, (err, result) => {
+				if (err) {
+					console.log(err);
+					res.status(500).send(err);
+				}
+				else {
+					res.status(201).send("Course added!");
+				}
+			});
+		} else {
+			res.status(403).send("You are not authorized to create a course");
+		}
+	}
+	else{
+		res.sendStatus(401);
+	}
 });
-
-
 
 // Get a single course
-courseRouter.get('/:id', (req, res) => {
-    Courses.findById(req.params.id, (err, course) => {
-        if (err) {
-            res.status(500).send(err);
-        }
-        res.send(course);
-    });
+courseRouter.get('/:code', (req, res) => {
+    sqlDB.query("SELECT * FROM courses WHERE code = ?", [req.params.code], (err, result) => {
+		if (err) {
+			console.log(err);
+			res.status(500).send(err);
+		}
+		res.send(result[0]);
+	});
 });
 
-// delete a course
-courseRouter.delete('/:id', passport.authenticate("session"), (req, res) => {
-    if(req.user){
-        if (req.user.role === 1 || req.user.role === 2) {
-            Courses.findByIdAndRemove(req.params.id, (err, course) => {
-                if (err) {
-                    console.log(err);
-                    res.status(500).send(err);
-                }
-                if(course){
-                res.send(course);
-                }
-                else{
-                    res.sendStatus(404);
-                }
-            });
-        } else {
-            res.status(401).send("You are not authorized to delete a course");
-        }
-    }
-    else{
-        res.sendStatus(401);
-    }
+// Delete a course
+courseRouter.delete('/:code', passport.authenticate("session"), (req, res) => {
+	if(req.user){
+		if (req.user.role === 1 || req.user.role === 2) {
+			sqlDB.query("DELETE FROM courses WHERE code = ?", [req.params.code], (err, result) => {
+				if (err) {
+					console.log(err);
+					res.status(500).send(err);
+				}
+				else {
+					res.status(200).send("Course deleted!");
+				}
+			});
+		} else {
+			res.status(403).send("You are not authorized to delete a course");
+		}
+	}
+	else{
+		res.sendStatus(401);
+	}
 });
-
-
 
 module.exports = courseRouter;

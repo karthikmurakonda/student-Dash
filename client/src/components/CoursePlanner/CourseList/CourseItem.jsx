@@ -9,39 +9,24 @@ const randomColor = require('randomcolor');
 // 		and allows the user to select them.
 // 		The list is filtered by the user's search term.
 
-function CourseItem({ course, id, disabled }) {
+function CourseItem({ course, name, code, disabled }) {
     const inputRef = useRef()
     const CP = useCP()
     const [showInfo, setShowInfo] = useState(false)
-    const [courseInfo, setCourseInfo] = useState({})
-
-    useEffect(() => {
-        server.get('/'+id)
-            .then((res) => {
-                setCourseInfo(res.data)
-            })
-            .catch((err) => {
-                console.log(err);
-            })
-    }, [])
 
     function getNearestDate(day, time) {
         const today = new Date();
         const dayOfWeek = today.getDay();
         const diff = day - dayOfWeek;
-        if (diff >= 0) {
-            return new Date(today.getFullYear(), today.getMonth(), today.getDate() + diff + 7, (time-(time%100))/100, time%100);
-        } else if (diff < 0) {
-            return new Date(today.getFullYear(), today.getMonth(), today.getDate() + diff + 7, (time-(time%100))/100, time%100);
-        }
+		return new Date(today.getFullYear(), today.getMonth(), today.getDate() + diff + 7, time.split(":")[0], time.split(":")[1]);
     }
 
     function addCourse() {
         // Add new calendar for the course
-        var color = randomColor({ luminosity: 'dark', seed: id })
+        var color = randomColor({ luminosity: 'dark', seed: code })
         const newCalendar = {
-            id: String(id),
-            name: course,
+            code: String(code),
+            name: name,
             bgColor: color,
             borderColor: color
         }
@@ -49,11 +34,11 @@ function CourseItem({ course, id, disabled }) {
         calendars.push(newCalendar)
         CP.setCalendars([...calendars])
         // Add each class to schedule
-        courseInfo.course_timetable.map(myClass => {
+        course.time_slot.map(myClass => {
             const newClass = {
-                id: String(CP.schedules.length+1),
-                calendarId: String(id),
-                title: course,
+                code: String(CP.schedules.length+1),
+                calendarcode: String(code),
+                title: name,
                 category: 'time',
                 dueDateClass: '',
                 start: getNearestDate(myClass.day, myClass.start_time).toISOString(),
@@ -61,45 +46,45 @@ function CourseItem({ course, id, disabled }) {
                 bgColor: color,
                 borderColor: color,
                 color: '#ffffff',
-                rawStart: parseInt(myClass.start_time),
-                rawEnd: parseInt(myClass.end_time),
+                rawStart: parseInt(myClass.start_time.split(":")[0]+myClass.start_time.split(":")[1]),
+                rawEnd: parseInt(myClass.end_time.split(":")[0]+myClass.end_time.split(":")[1]),
                 rawDay: parseInt(myClass.day),
-                rawId: id
+                rawcode: code
             }
             let schedules = CP.schedules
             schedules.push(newClass)
             CP.setSchedules([...schedules])
-            CP.setTotalCredits(CP.totalCredits+courseInfo.course_credit)
+            CP.setTotalCredits(CP.totalCredits+course.credits)
         })
     }
 
     function removeCourse() {
         let calendars = CP.calendars
-        // remove item from array when id matches
-        calendars = calendars.filter(calendar => calendar.id !== id)
+        // remove item from array when code matches
+        calendars = calendars.filter(calendar => calendar.code !== code)
         CP.setCalendars(calendars);
         
         // remove each class from schedule
         let schedules = CP.schedules
-        schedules = schedules.filter(schedule => schedule.calendarId !== id);
+        schedules = schedules.filter(schedule => schedule.calendarcode !== code);
         // set new schedules and get clashes
         CP.setSchedules(schedules);
-        CP.setTotalCredits(CP.totalCredits-courseInfo.course_credit)
+        CP.setTotalCredits(CP.totalCredits-course.credits)
     }
 
     function removeFromList() {
         let calendars = CP.calendars
-        // remove item from array when id matches
-        const currCal = calendars.filter(calendar => calendar.id === id)
-        calendars = calendars.filter(calendar => calendar.id !== id)
+        // remove item from array when code matches
+        const currCal = calendars.filter(calendar => calendar.code === code)
+        calendars = calendars.filter(calendar => calendar.code !== code)
         CP.setCalendars(calendars);
         // remove each class from schedule
         let schedules = CP.schedules
-        schedules = schedules.filter(schedule => schedule.calendarId !== id);
+        schedules = schedules.filter(schedule => schedule.calendarcode !== code);
         // set new schedules and get clashes
         CP.setSchedules(schedules);
         if(currCal.length > 0) {
-            CP.setTotalCredits(CP.totalCredits-courseInfo.course_credit)
+            CP.setTotalCredits(CP.totalCredits-course.credits)
         }
     }
 
@@ -115,14 +100,14 @@ function CourseItem({ course, id, disabled }) {
 
     function handleRemove() {
         removeFromList()
-        CP.deselectCourse(id)
+        CP.deselectCourse(code)
     }
 
     return (
         < >
         <label className="list-group-item" >
             <input ref={inputRef} onChange={handleSelect} className="form-check-input me-2" type="checkbox" value="" disabled={disabled} />
-            {course}
+            {name}
             <a href="#" onClick={() => setShowInfo(!showInfo)} className="link-primary mx-1"><i className="bi bi-info-circle"></i></a>
             <CloseButton className="float-end" onClick={handleRemove} />
         </label>
@@ -132,15 +117,19 @@ function CourseItem({ course, id, disabled }) {
                     <tbody>
                         <tr>
                             <td>Credits:</td>
-                            <td>{courseInfo.course_credit}</td>
+                            <td>{course.credits}</td>
                         </tr>
                         <tr>
-                            <td>Mode:</td>
-                            <td>{courseInfo.course_venue}</td>
+                            <td>Venue:</td>
+                            <td>{course.venue}</td>
                         </tr>
                         <tr>
                             <td>Instructor:</td>
-                            <td>{courseInfo.course_instructor}</td>
+                            <td>{course.instructor}</td>
+                        </tr>
+						<tr>
+                            <td>Capacity:</td>
+                            <td>{course.capacity}</td>
                         </tr>
                     </tbody>
                 </table>

@@ -11,7 +11,7 @@ const server = axios.create({
 })
 
 export default function Post({post, update, setUpdate}) {
-    var date = new Date(post.createdAt)
+    var date = new Date(post.created_at)
     const auth = useAuth()
 
     function to12hour(hours, mins) {
@@ -25,7 +25,13 @@ export default function Post({post, update, setUpdate}) {
             return (hours%12)+":"+mins+" pm"
         }
         else {
-            return hours+":"+mins+" am"
+            if (mins === 0) {
+                return (hours)+":00 am"
+            }
+            else if (mins<10) {
+                return (hours)+":0"+mins+" am" 
+            }
+            return (hours)+":"+mins+" am"
         }
     }
 
@@ -70,7 +76,7 @@ export default function Post({post, update, setUpdate}) {
             <Card.Body>
                 {post.content}
             </Card.Body>
-            {(auth.user.role === 1 || auth.user.role === 2 || auth.user._id === post.authorId)? (
+            {(auth.user.role === 1 || auth.user.role === 2 || auth.user.username === post.author)? (
                 <ListGroup><div className="text-end px-3 py-1"><Button onClick={deletePost} variant="outline-danger"><i className="bi bi-trash-fill"></i></Button></div></ListGroup>
             ):(
                 <></>

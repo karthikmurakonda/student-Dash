@@ -19,6 +19,17 @@ npm i
 ## Set environmental variables
 Make .env files in both server and client folder. Example files have already been provided.
 
+## Create a database
+Create a database and add the name to the .env file in the server folder.
+
+## Import schema.sql
+
+All the database tables created by the project are stored in the schema.sql file. Either import the file in your database in phpmyadmin or run the sql commands in the mysql terminal as given below.
+
+```mysql
+mysql> source <path-to-schema.sql>
+```
+
 ## Run the Project
 To run the project make sure mongoDB is running, if not start it. Post this you may start the backend server by running the following command in the folder `/server/`
 ```
